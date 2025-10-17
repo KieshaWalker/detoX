@@ -1,0 +1,123 @@
+# Terms of Service for detoX
+
+**Last Updated: October 16, 2025**
+
+## 1. Acceptance of Terms
+
+Welcome to detoX ("we," "us," or "our"). These Terms of Service ("Terms") govern your access to and use of the detoX mobile application and website (collectively, the "Service"). By accessing or using our Service, you agree to be bound by these Terms. If you do not agree to these Terms, you may not access or use the Service.
+
+## 2. Description of Service
+
+detoX is a social media platform that allows users to share videos, photos, and other content. Access to detoX requires completion of an application process, including a questionnaire designed to assess user suitability for the platform.
+
+## 3. Eligibility and Account Registration
+
+### 3.1 Age Requirements
+You must be at least 18 years old to use detoX. By using our Service, you represent that you are at least 18 years old. detoX is not intended for children under 18, and we do not knowingly collect personal information from individuals under 18 in accordance with the Children's Online Privacy Protection Act (COPPA).
+
+### 3.2 Application Process
+Access to detoX is by invitation only. All applicants must complete a comprehensive questionnaire as part of the application process.
+
+### 3.3 Questionnaire and Assessment Waiver
+**IMPORTANT: By submitting the detoX questionnaire, you expressly waive and relinquish any right to:**
+
+- Know, access, or receive information about the specific answers, scoring methodology, evaluation criteria, or decision-making process used to assess your application
+- Contest, challenge, appeal, or dispute the acceptance or rejection of your profile or application
+- Receive any explanation, justification, or reasoning for acceptance or rejection decisions
+- Request reconsideration or re-evaluation of your application
+
+This waiver is a material term of these Terms and is irrevocable. You acknowledge that detoX's application review process is proprietary and confidential, and you agree not to attempt to discover, reverse-engineer, or otherwise obtain information about the evaluation process.
+
+## 4. User Conduct and Content
+
+### 4.1 Acceptable Use
+You agree to use detoX only for lawful purposes and in accordance with these Terms. You are solely responsible for your conduct and any content you post.
+
+### 4.2 Prohibited Content and Conduct
+You may not post content that is:
+- Illegal, harmful, threatening, abusive, harassing, defamatory, vulgar, obscene, or invasive of another's privacy
+- Infringing on intellectual property rights
+- Promoting violence, discrimination, or illegal activities
+- Spam, misleading, or deceptive
+
+### 4.3 Content Ownership
+You retain ownership of content you create and post on detoX. However, by posting content, you grant detoX a worldwide, non-exclusive, royalty-free license to use, display, and distribute your content on our platform.
+
+## 5. Privacy and Data
+
+Your privacy is important to us. Please review our Privacy Policy, which also governs your use of detoX, for information on how we collect, use, and share your information.
+
+## 6. Intellectual Property
+
+### 6.1 detoX IP
+The Service and its original content, features, and functionality are owned by detoX and are protected by copyright, trademark, and other intellectual property laws.
+
+### 6.2 DMCA Compliance
+detoX respects intellectual property rights and complies with the Digital Millennium Copyright Act (DMCA). If you believe your copyright has been infringed, please contact our designated DMCA agent:
+
+**DMCA Agent:**  
+detoX Legal Department  
+Email: dmca@detoX.com  
+Address: [Your Business Address]  
+
+Your notice must include:
+- Identification of the copyrighted work claimed to have been infringed
+- Identification of the material that is claimed to be infringing
+- Your contact information
+- A statement of good faith belief that the use is not authorized
+- A statement made under penalty of perjury that the information is accurate
+- Your physical or electronic signature
+
+We will respond to valid DMCA notices within the timeframes specified by law.
+
+## 7. Account Termination
+
+We reserve the right to suspend or terminate your account at any time for violations of these Terms or for other reasons we deem necessary to protect the platform and its users.
+
+## 8. Disclaimers and Limitation of Liability
+
+### 8.1 Service "As Is"
+detoX is provided "as is" without warranties of any kind.
+
+### 8.2 Limitation of Liability
+To the maximum extent permitted by law, detoX shall not be liable for any indirect, incidental, special, or consequential damages.
+
+## 9. Indemnification
+
+You agree to indemnify and hold detoX harmless from any claims, damages, or expenses arising from your use of the Service or violation of these Terms.
+
+## 10. Governing Law and Dispute Resolution
+
+These Terms are governed by the laws of the State of Delaware, United States, without regard to its conflict of laws principles.
+
+### 10.1 Binding Arbitration
+Any disputes arising out of or relating to these Terms or your use of the Service shall be resolved through binding arbitration administered by the American Arbitration Association (AAA) under its Commercial Arbitration Rules. The arbitration shall take place in Delaware, and the arbitrator's decision shall be final and binding.
+
+### 10.2 Class Action Waiver
+You agree that any arbitration or proceeding shall be limited to the dispute between us and you individually. To the full extent permitted by law, (1) no arbitration or proceeding shall be joined with any other; (2) there is no right or authority for any dispute to be arbitrated or resolved on a class action-basis or to utilize class action procedures; and (3) there is no right or authority for any dispute to be brought in a purported representative capacity on behalf of the general public or any other persons.
+
+### 10.3 Opt-Out Right
+You have the right to opt-out of this arbitration agreement within 30 days of first accepting these Terms by sending an email to legal@detoX.com with the subject line "Arbitration Opt-Out."
+
+## 11. Changes to Terms
+
+We may modify these Terms at any time. We will notify you of material changes by email or through our Service. Continued use of the Service after changes constitutes acceptance of the new Terms.
+
+## 12. Severability
+
+If any provision of these Terms is found to be unenforceable or invalid, that provision will be limited or eliminated to the minimum extent necessary so that the Terms will otherwise remain in full force and effect.
+
+## 13. Entire Agreement
+
+These Terms, together with our Privacy Policy, constitute the entire agreement between you and detoX regarding the use of our Service.
+
+## 14. Contact Information
+
+If you have questions about these Terms, please contact us at:
+- Email: legal@detoX.com
+- Address: [Your Business Address]
+- Phone: [Your Phone Number]
+
+---
+
+**By using detoX, you acknowledge that you have read, understood, and agree to be bound by these Terms of Service.**

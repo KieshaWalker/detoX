@@ -1,0 +1,185 @@
+# Privacy Policy for detoX
+
+**Last Updated: October 16, 2025**
+
+## 1. Introduction
+
+Welcome to detoX ("we," "us," or "our"). This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our mobile application and website (collectively, the "Service"). Please read this Privacy Policy carefully. By using detoX, you agree to the collection and use of information in accordance with this policy.
+
+## 2. Information We Collect
+
+### 2.1 Information You Provide
+- **Account Information**: Email address, username, profile information
+- **Questionnaire Responses**: All answers provided during the application process
+- **Content You Post**: Videos, photos, comments, and other user-generated content
+- **Communications**: Messages sent through our support channels
+
+### 2.2 Information We Collect Automatically
+- **Device Information**: Device type, operating system, unique device identifiers, IP address
+- **Usage Data**: How you interact with our Service, features used, time spent, pages viewed
+- **Location Data**: With your permission, general location information (not precise GPS data)
+- **Cookies and Tracking Technologies**: We use cookies, web beacons, and similar technologies to collect information about your browsing behavior and preferences
+
+### 2.4 Cookies and Tracking Technologies
+We use the following types of cookies:
+- **Essential Cookies**: Required for basic Service functionality
+- **Analytics Cookies**: Help us understand how you use our Service
+- **Functional Cookies**: Remember your preferences and settings
+- **Advertising Cookies**: Used for targeted advertising (with your consent where required)
+
+You can control cookie preferences through your browser settings, but disabling certain cookies may affect Service functionality.
+
+### 2.3 Information from Third Parties
+- **Social Media Platforms**: If you connect social accounts
+- **Analytics Providers**: Usage statistics and crash reports
+
+## 3. How We Use Your Information
+
+We use collected information for the following purposes:
+
+### 3.1 Lawful Bases for Processing (GDPR)
+Under GDPR, we rely on the following lawful bases for processing your personal information:
+- **Consent**: When you explicitly agree to processing (e.g., optional features)
+- **Contract**: To provide our Service and fulfill our contractual obligations
+- **Legitimate Interests**: For analytics, security, and Service improvement
+- **Legal Obligation**: To comply with applicable laws and regulations
+
+### 3.2 Specific Uses
+- **Provide and Maintain Service**: Process applications, create accounts, deliver content
+- **Application Review**: Evaluate questionnaire responses for platform access decisions
+- **Personalization**: Customize your experience and content recommendations
+- **Communication**: Send service updates, respond to inquiries, provide support
+- **Safety and Security**: Detect and prevent fraud, abuse, and security incidents
+- **Analytics**: Understand usage patterns and improve our Service
+- **Legal Compliance**: Meet legal obligations and enforce our Terms
+
+## 4. Questionnaire and Assessment Waiver
+
+### 4.1 Proprietary Evaluation Process
+detoX uses a proprietary methodology to evaluate applications, including questionnaire responses. This process is confidential and includes algorithmic analysis, human review, and other assessment techniques.
+
+### 4.2 Waiver of Rights
+**IMPORTANT: By submitting the detoX questionnaire and providing your responses, you expressly waive and relinquish any right to:**
+
+- Know, access, or receive information about your specific questionnaire answers, scoring, evaluation criteria, or decision-making process
+- Contest, challenge, appeal, or dispute the acceptance or rejection of your application
+- Receive any explanation, justification, or reasoning for acceptance or rejection decisions
+- Request reconsideration, re-evaluation, or review of your application outcome
+- Access any data, analytics, or insights about how your application was assessed
+
+This waiver is irrevocable and applies to all aspects of the application review process, including but not limited to automated scoring, human review, comparative analysis, and final decision-making.
+
+### 4.3 No Transparency Obligations
+You acknowledge that detoX has no obligation to disclose, explain, or provide transparency regarding:
+- The specific questions asked or not asked
+- Weighting or importance of different responses
+- Comparative analysis with other applicants
+- Human reviewer notes or feedback
+- Algorithmic decision factors
+
+## 5. Information Sharing and Disclosure
+
+We may share your information in the following circumstances:
+- **With Your Consent**: When you explicitly agree to sharing
+- **Service Providers**: With trusted third parties who assist our operations
+- **Legal Requirements**: When required by law or to protect rights and safety
+- **Business Transfers**: In connection with a merger, acquisition, or sale of assets
+- **Aggregated Data**: Non-personally identifiable information for analytics
+
+We do not sell your personal information to third parties for monetary compensation. However, we may share information with advertising partners for targeted advertising purposes, which may be considered a "sale" under CCPA. You have the right to opt-out of such sharing.
+
+## 6. Data Security
+
+We implement appropriate technical and organizational measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction. These measures include:
+- Encryption of data in transit and at rest
+- Regular security assessments and penetration testing
+- Access controls and employee training
+- Secure data centers and infrastructure
+
+However, no method of transmission over the internet or electronic storage is 100% secure.
+
+## 7. Data Breach Notification
+
+In the event of a security breach affecting your personal information, we will:
+- Notify affected users within 72 hours (or as required by applicable law)
+- Provide clear information about the breach, what information was affected, and steps you can take
+- Report the breach to relevant authorities as required by law
+- Take immediate steps to contain and remediate the breach
+
+We retain your information for as long as necessary to provide our Service and fulfill the purposes outlined in this Privacy Policy, unless a longer retention period is required by law.
+
+## 8. Your Rights and Choices
+
+Depending on your location, you may have the following rights regarding your personal information:
+
+### 8.1 General Rights
+- **Access**: Request a copy of your personal information we hold
+- **Correction**: Update or correct inaccurate information
+- **Deletion**: Request deletion of your personal information (subject to legal requirements)
+- **Portability**: Request transfer of your data in a structured format
+- **Opt-out**: Withdraw consent or opt-out of certain processing activities
+
+### 8.2 California Consumer Privacy Act (CCPA) Rights
+If you are a California resident, you have additional rights under CCPA:
+- **Right to Know**: Request information about categories and specific pieces of personal information collected
+- **Right to Delete**: Request deletion of personal information (with exceptions)
+- **Right to Opt-Out**: Opt-out of the sale of personal information
+- **Right to Non-Discrimination**: Protection against discriminatory treatment for exercising CCPA rights
+
+### 8.3 GDPR Rights (EU Residents)
+If you are located in the European Union, you have rights under GDPR:
+- **Right to Information**: Be informed about processing activities
+- **Right to Access**: Obtain confirmation of processing and access to your data
+- **Right to Rectification**: Have inaccurate data corrected
+- **Right to Erasure**: Have data erased in certain circumstances
+- **Right to Restrict Processing**: Limit processing in certain situations
+- **Right to Data Portability**: Receive data in a structured format
+- **Right to Object**: Object to processing based on legitimate interests
+- **Rights Related to Automated Decision-Making**: Not be subject to automated decisions with legal effects
+
+### 8.4 How to Exercise Your Rights
+To exercise any of these rights, please contact us at privacy@detoX.com or through our in-app privacy settings. We will respond to your request within the timeframes required by applicable law. You may need to verify your identity before we can process your request.
+
+## 10. International Data Transfers
+
+Your information may be transferred to and processed in countries other than your own, including the United States. When we transfer personal information from the European Economic Area or other regions with data protection laws, we ensure appropriate safeguards are in place, including:
+
+- **Standard Contractual Clauses**: Approved by the European Commission
+- **Adequacy Decisions**: Transfers to countries deemed adequate by relevant authorities
+- **Binding Corporate Rules**: Our internal data protection policies
+- **Your Consent**: Where appropriate safeguards are not available through other means
+
+For more information about our international data transfers and applicable safeguards, please contact us at privacy@detoX.com.
+
+## 10. Children's Privacy
+
+detoX is not intended for children under 18. We do not knowingly collect personal information from children under 18. If we become aware of such collection, we will delete the information immediately.
+
+## 11. Third-Party Links and Services
+
+Our Service may contain links to third-party websites or services. We are not responsible for the privacy practices of these third parties.
+
+## 12. Changes to This Privacy Policy
+
+We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the "Last Updated" date.
+
+## 14. Contact Us
+
+If you have any questions about this Privacy Policy or our data practices, please contact us at:
+
+**Data Protection Officer:**  
+Email: dpo@detoX.com  
+
+**Privacy Team:**  
+Email: privacy@detoX.com  
+Address: [Your Business Address]  
+Phone: [Your Phone Number]  
+
+For CCPA requests, please include "CCPA Request" in the subject line.  
+For GDPR requests, please include "GDPR Request" in the subject line.
+
+We will respond to your inquiries within the timeframes required by applicable law.
+
+---
+
+**By using detoX, you acknowledge that you have read and understood this Privacy Policy and consent to the collection and use of your information as described herein.**
