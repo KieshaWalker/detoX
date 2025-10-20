@@ -118,7 +118,7 @@ Platforms: iOS and Android mobile apps
 Age: 18+ only
 Internet: Stable internet connection for content upload/download
 Support
-Email: detoconnect@gmail.com
+Email: deto.connect@gmail.com
 In-App: Help section with FAQs and contact forms
 Community: Peer support through user discussions
 detoX: Where Quality Meets Community
