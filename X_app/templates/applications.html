@@ -1,25 +1,20 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}My Site{% endblock %}</title>
+    <title>Document</title>
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
 </head>
-
 <body>
     <header>
         <h1>Welcome to detoX</h1>
         <nav>
+          {% if user.is_authenticated %}
             <ul>
-                {% if user.is_authenticated %}
                 <li class="nav-item">
                     <a href="{% url 'home' %}">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a href="{% url 'invite' %}">Send Invitation</a>
                 </li>
                 <li>
                     <form id="logout-form" method="post" action="{% url 'logout' %}">
@@ -27,15 +22,17 @@
                         <button type="submit">Log out</button>
                     </form>
                 </li>
-                {% else %}
+            </ul>
+        {% else %}
+            <ul>
                 <li class="nav-item">
                     <a href="{% url 'login' %}">Login</a>
                 </li>
                 <li class="nav-item">
-                    <a href="{% url 'register' %}">Enter Invitation Code</a>
+                    <a href="{% url 'invite' %}">Enter invitation code</a>
                 </li>
-                {% endif %}
             </ul>
+        {% endif %}
         </nav>
     </header>
     <main>
@@ -47,6 +44,6 @@
     <footer>
         <p>&copy; 2025</p>
     </footer>
+    
 </body>
-
 </html>

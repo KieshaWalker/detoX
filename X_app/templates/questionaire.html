@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<section class="register-section">
+    <h2>Complete Your Registration</h2>
+    <p>Please fill out this personal reflection questionnaire to join detoX.</p>
+
+    <form action="{% url 'questionaire' %}" method="post" class="register-form">
+        {% csrf_token %}
+
+        <!-- Basic Information -->
+        <div class="form-section">
+            <h3>Basic Information</h3>
+            <div class="form-group">
+                <label for="{{ form.full_name.id_for_label }}">Full Name *</label>
+                {{ form.full_name }}
+                {% if form.full_name.errors %}<div class="error">{{ form.full_name.errors }}</div>{% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.email.id_for_label }}">Email Address *</label>
+                {{ form.email }}
+                {% if form.email.errors %}<div class="error">{{ form.email.errors }}</div>{% endif %}
+            </div>
+        </div>
+
+        <!-- Questionnaire Section -->
+        <div class="form-section">
+            <h3>Personal Reflection Questionnaire</h3>
+
+            <div class="form-group">
+                <label>Which of the following best describes your motivation in helping others?</label>
+                {{ form.motivation_help_others }}
+                {% if form.motivation_help_others.errors %}<div class="error">{{ form.motivation_help_others.errors }}</div>{% endif %}
+            </div>
+
+            <div class="form-group">
+                <label>How do you view human nature?</label>
+                {{ form.human_nature_view }}
+                {% if form.human_nature_view.errors %}<div class="error">{{ form.human_nature_view.errors }}</div>{% endif %}
+            </div>
+
+            <div class="form-group">
+                <label>Which statement best reflects your belief about fairness?</label>
+                {{ form.fairness_belief }}
+                {% if form.fairness_belief.errors %}<div class="error">{{ form.fairness_belief.errors }}</div>{% endif %}
+            </div>
+
+            <div class="form-group">
+                <label>What drives your long-term goals the most?</label>
+                {{ form.long_term_goals }}
+                {% if form.long_term_goals.errors %}<div class="error">{{ form.long_term_goals.errors }}</div>{% endif %}
+            </div>
+
+            <div class="form-group">
+                <label>How do you typically respond when someone shares a personal struggle with you?</label>
+                {{ form.response_personal_struggle }}
+                {% if form.response_personal_struggle.errors %}<div class="error">{{ form.response_personal_struggle.errors }}</div>{% endif %}
+            </div>
+
+            <div class="form-group">
+                <label>When you witness someone being treated unfairly, what is your first instinct?</label>
+                {{ form.response_unfair_treatment }}
+                {% if form.response_unfair_treatment.errors %}<div class="error">{{ form.response_unfair_treatment.errors }}</div>{% endif %}
+            </div>
+
+            <div class="form-group">
+                <label>How do you define success in life?</label>
+                {{ form.success_definition }}
+                {% if form.success_definition.errors %}<div class="error">{{ form.success_definition.errors }}</div>{% endif %}
+            </div>
+
+            <div class="form-group">
+                <label>What role does forgiveness play in your relationships?</label>
+                {{ form.forgiveness_role }}
+                {% if form.forgiveness_role.errors %}<div class="error">{{ form.forgiveness_role.errors }}</div>{% endif %}
+            </div>
+
+            <div class="form-group">
+                <label>How do you cope with failure or disappointment?</label>
+                {{ form.coping_failure }}
+                {% if form.coping_failure.errors %}<div class="error">{{ form.coping_failure.errors }}</div>{% endif %}
+            </div>
+
+            <div class="form-group">
+                <label>How do you approach learning about different cultures or perspectives?</label>
+                {{ form.learning_cultures }}
+                {% if form.learning_cultures.errors %}<div class="error">{{ form.learning_cultures.errors }}</div>{% endif %}
+            </div>
+
+            <div class="form-group">
+                <label>What does empathy mean to you?</label>
+                {{ form.empathy_definition }}
+                {% if form.empathy_definition.errors %}<div class="error">{{ form.empathy_definition.errors }}</div>{% endif %}
+            </div>
+
+            <div class="form-group">
+                <label>How do you handle situations where your values conflict with someone else's?</label>
+                {{ form.values_conflict }}
+                {% if form.values_conflict.errors %}<div class="error">{{ form.values_conflict.errors }}</div>{% endif %}
+            </div>
+
+            <div class="form-group">
+                <label>What motivates you to help others?</label>
+                {{ form.help_motivation }}
+                {% if form.help_motivation.errors %}<div class="error">{{ form.help_motivation.errors }}</div>{% endif %}
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn submit">Complete Registration</button>
+        </div>
+
+        {% if form.non_field_errors %}
+        <div class="error">
+            {% for error in form.non_field_errors %}
+            <p>{{ error }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </form>
+</section>
+
+{% endblock %}

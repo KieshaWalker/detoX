@@ -1,0 +1,30 @@
+{% extends 'base.html' %} {% load static %} {% block head %}
+<link rel="stylesheet" href="{% static 'css/base.css' %}" />
+{% endblock %} {% block content %}
+
+<section class="invite-section">
+  <h2>Send Invitation to a Friend</h2>
+  <p>Share detoX with someone special. Include a secret word or sentence they'll recognize!</p>
+
+  <form action="{% url 'invite' %}" method="post" class="invite-form">
+    {% csrf_token %}
+    <label for="id_email">Friend's Email Address:</label>
+    <input type="email" name="email" id="id_email" required placeholder="friend@example.com">
+
+    <label for="id_secret_message">Secret Word/Sentence:</label>
+    <input type="text" name="secret_message" id="id_secret_message" required
+      placeholder="Something only they would know..." maxlength="200">
+
+    <button type="submit" class="btn submit">Send Invitation</button>
+  </form>
+
+  {% if messages %}
+  <div class="messages">
+    {% for message in messages %}
+    <p class="{% if message.tags %}{{ message.tags }}{% endif %}">{{ message.message }}</p>
+    {% endfor %}
+  </div>
+  {% endif %}
+</section>
+
+{% endblock %}

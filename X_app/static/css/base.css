@@ -17,3 +17,250 @@ h1 {
     padding: 0.2em 0.5em;
 }
 
+a {
+    color: #333;
+    font-size: 1.2em;
+    margin-bottom: 0.5em;
+    padding: 0.2em 0.5em;
+    text-decoration: none;
+}
+
+li {
+    margin: 0.5em 0;
+    list-style: none;
+    text-align: center;
+}
+
+
+.login-section {
+    background-color: #211f1f;
+    padding: 2em;
+    border-radius: 1em;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* ===== DJANGO FORM STYLING ===== */
+
+/* Form container */
+form {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+/* Each form field paragraph */
+p {
+    margin-bottom: 1.5em;
+}
+
+/* Form labels */
+label {
+    display: block;
+    color: #333;
+    font-weight: bold;
+    margin-bottom: 0.5em;
+    font-size: 1.1em;
+}
+
+/* Form inputs */
+input[type="text"],
+input[type="password"] {
+    width: 100%;
+    padding: 0.8em;
+    border: 2px solid #555;
+    border-radius: 0.5em;
+    background-color: #333;
+    color: #fff;
+    font-size: 1em;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+    outline: none;
+    border-color: #082647;
+    box-shadow: 0 0 5px rgba(8, 38, 71, 0.5);
+}
+
+/* Submit button */
+.btn.submit {
+    background-color: #082647;
+    color: white;
+    padding: 0.8em 2em;
+    border: none;
+    border-radius: 0.5em;
+    font-size: 1.1em;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.3s ease;
+}
+
+.btn.submit:hover {
+    background-color: #082647;
+}
+
+.btn.submit:active {
+    transform: translateY(1px);
+}
+
+/* CSRF token (hidden, but if you want to style it) */
+input[name="csrfmiddlewaretoken"] {
+    display: none;
+}
+
+/* Form validation errors */
+.errorlist {
+    color: #896bff;
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1em 0;
+}
+
+.errorlist li {
+    background-color: rgba(137, 107, 255, 0.1);
+    border-left: 4px solid #896bff;
+    padding: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+/* Required field indicator */
+label::after {
+    content: " *";
+    color: #896bff;
+}
+
+/* Invite form specific styling */
+.invite-form input[type="email"] {
+    border-color: #555;
+}
+
+.invite-form input[type="email"]:focus {
+    border-color: #28a745;
+    box-shadow: 0 0 5px rgba(40, 167, 69, 0.5);
+}
+
+/* Messages styling */
+.messages {
+    margin-top: 1em;
+    padding: 1em;
+    border-radius: 0.5em;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.messages .success {
+    background-color: rgba(40, 167, 69, 0.1);
+    border: 1px solid #28a745;
+    color: #28a745;
+}
+
+.messages .error {
+    background-color: rgba(220, 53, 69, 0.1);
+    border: 1px solid #dc3545;
+    color: #dc3545;
+}
+
+.messages p {
+    margin: 0;
+    padding: 0.5em 0;
+    font-weight: bold;
+}
+
+/* Registration form styling */
+.register-section {
+    max-width: 800px;
+    margin: 2em auto;
+    padding: 2em;
+    background-color: #211f1f;
+    border-radius: 1em;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.register-section h2 {
+    color: #e0e0e0;
+    text-align: center;
+    margin-bottom: 0.5em;
+}
+
+.register-section>p {
+    text-align: center;
+    color: #ccc;
+    margin-bottom: 2em;
+}
+
+.form-section {
+    margin-bottom: 2em;
+    padding: 1.5em;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 0.5em;
+}
+
+.form-section h3 {
+    color: #e0e0e0;
+    margin-bottom: 1em;
+    border-bottom: 2px solid #555;
+    padding-bottom: 0.5em;
+}
+
+.form-group {
+    margin-bottom: 1.5em;
+}
+
+.form-group label {
+    display: block;
+    color: #e0e0e0;
+    font-weight: bold;
+    margin-bottom: 0.5em;
+    font-size: 1em;
+}
+
+.form-group select,
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group textarea {
+    width: 100%;
+    padding: 0.8em;
+    border: 2px solid #555;
+    border-radius: 0.5em;
+    background-color: #333;
+    color: #fff;
+    font-size: 1em;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+}
+
+.form-group select:focus,
+.form-group input[type="text"]:focus,
+.form-group input[type="email"]:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.help-text {
+    display: block;
+    color: #888;
+    font-size: 0.9em;
+    margin-top: 0.3em;
+}
+
+.error {
+    color: #ff6b6b;
+    font-size: 0.9em;
+    margin-top: 0.3em;
+}
+
+.form-actions {
+    text-align: center;
+    margin-top: 2em;
+    padding-top: 2em;
+    border-top: 1px solid #555;
+}

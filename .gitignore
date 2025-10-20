@@ -7,3 +7,43 @@ MVPuserstories.txt
 potential.txt
 erd.txt
 settings.py
+questionaire.html.backup
+
+# Backup files
+*.backup
+*.bak
+*~
+
+# Proprietary information
+privacy_policy.txt
+terms_of_service.txt
+acknowledgements.txt
+howto.txt
+legal.txt
+questionaire.txt
+important.txt
+MVPuserstories.txt
+potential.txt
+erd.txt
+
+# Database files
+*.sqlite3
+*.db
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
