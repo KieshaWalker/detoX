@@ -1,0 +1,19 @@
+html {
+    background-color: #746666;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+h1 {
+    color: rgb(31, 31, 59);
+    font-size: 2.5em;
+    margin-bottom: 0.5em;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.6);
+    border-radius: 1em;
+    padding: 0.2em 0.5em;
+}
+

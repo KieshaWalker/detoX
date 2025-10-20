@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Review Applications - detoX Admin</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .invitation-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .invitation-header {
+            background: #f8f9fa;
+            padding: 10px;
+            margin: -20px -20px 15px -20px;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .form-group {
+            margin-bottom: 10px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        .btn-approve {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-reject {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn:hover {
+            opacity: 0.8;
+        }
+
+        .no-applications {
+            text-align: center;
+            color: #666;
+            font-style: italic;
+            padding: 40px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Review Applications</h1>
+
+    {% if pending_invitations %}
+    <p>You have {{ pending_invitations|length }} application(s) to review.</p>
+
+    {% for invitation in pending_invitations %}
+    <div class="invitation-card">
+        <div class="invitation-header">
+            <strong>{{ invitation.receiver_email }}</strong> - Invited by {{ invitation.sender.username }}
+            <br><small>Sent: {{ invitation.sent_at|date:"M d, Y H:i" }}</small>
+        </div>
+
+        <p><strong>Invitation Message:</strong> "{{ invitation.custom_message }}"</p>
+        <p><strong>Secret Sentence:</strong> "{{ invitation.secret_sentence }}"</p>
+
+        <form method="post" style="display: inline;">
+            {% csrf_token %}
+            <input type="hidden" name="invitation_id" value="{{ invitation.id }}">
+            <input type="hidden" name="action" value="approve">
+            <button type="submit" class="btn btn-approve">✓ Approve</button>
+        </form>
+
+        <form method="post" style="display: inline;">
+            {% csrf_token %}
+            <input type="hidden" name="invitation_id" value="{{ invitation.id }}">
+            <input type="hidden" name="action" value="reject">
+            <button type="submit" class="btn btn-reject">✗ Reject</button>
+        </form>
+    </div>
+    {% endfor %}
+    {% else %}
+    <div class="no-applications">
+        <h3>No applications to review</h3>
+        <p>All pending applications have been processed.</p>
+    </div>
+    {% endif %}
+
+    <p><a href="{% url 'invite' %}">← Back to Home</a></p>
+</body>
+
+</html>

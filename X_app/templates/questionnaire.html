@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Application Questionnaire - detoX</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        textarea {
+            height: 100px;
+            resize: vertical;
+        }
+
+        button {
+            background: #007bff;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        .invitation-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>detoX Application</h1>
+
+    <div class="invitation-info">
+        <strong>Invitation from:</strong> {{ invitation.sender.username }}<br>
+        <strong>Message:</strong> "{{ invitation.custom_message }}"
+    </div>
+
+    <p>Please complete this questionnaire to apply for detoX membership.</p>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label for="{{ form.full_name.id_for_label }}">Full Name:</label>
+            {{ form.full_name }}
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.experience_years.id_for_label }}">Years of Experience (in any field):</label>
+            {{ form.experience_years }}
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.motivation.id_for_label }}">What motivates you to join detoX? (Please be
+                thoughtful)</label>
+            {{ form.motivation }}
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.skills.id_for_label }}">What skills, experiences, or perspectives do you bring to our
+                community?</label>
+            {{ form.skills }}
+        </div>
+
+        <button type="submit">Submit Application</button>
+    </form>
+</body>
+
+</html>
