@@ -8,6 +8,36 @@ class RegistrationForm(forms.ModelForm):
         help_text="Enter the invitation code you received via email"
     )
 
+    # Terms of Service Agreement - Required for legal compliance
+    terms_agreement = forms.BooleanField(
+        required=True,
+        label="I agree to the Terms of Service",
+        help_text="You must read and agree to our Terms of Service to continue",
+        error_messages={
+            'required': 'You must agree to the Terms of Service to register.'
+        }
+    )
+
+    # Privacy Policy Agreement - Required for legal compliance
+    privacy_agreement = forms.BooleanField(
+        required=True,
+        label="I agree to the Privacy Policy",
+        help_text="You must read and agree to our Privacy Policy to continue",
+        error_messages={
+            'required': 'You must agree to the Privacy Policy to register.'
+        }
+    )
+
+    # Waiver of Results - Required for data usage consent
+    results_waiver = forms.BooleanField(
+        required=True,
+        label="I consent to the use of my questionnaire responses for compatibility matching and research",
+        help_text="Your responses will be used to find compatible matches and may be analyzed for research purposes",
+        error_messages={
+            'required': 'You must consent to the use of your questionnaire responses to continue.'
+        }
+    )
+
     class Meta:
         model = QuestionnaireResponse
         fields = [
@@ -30,7 +60,7 @@ class RegistrationForm(forms.ModelForm):
             invitation = InvitationCode.objects.get(code=code, used=False)
         except InvitationCode.DoesNotExist:
             raise forms.ValidationError("Invalid or already used invitation code.")
-        return code
+        return invitation
 
     def clean_email(self):
         email = self.cleaned_data.get('email')

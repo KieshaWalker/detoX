@@ -1,5 +1,12 @@
-{% extends 'base.html' %}
-{% block content %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>questionaire</title>
+</head>
+<body>
 
 <section class="register-section">
     <h2>Complete Your Registration</h2>
@@ -31,7 +38,8 @@
             <div class="form-group">
                 <label>Which of the following best describes your motivation in helping others?</label>
                 {{ form.motivation_help_others }}
-                {% if form.motivation_help_others.errors %}<div class="error">{{ form.motivation_help_others.errors }}</div>{% endif %}
+                {% if form.motivation_help_others.errors %}<div class="error">{{ form.motivation_help_others.errors }}
+                </div>{% endif %}
             </div>
 
             <div class="form-group">
@@ -107,6 +115,67 @@
             </div>
         </div>
 
+        <!-- Terms of Service Agreement - Required for legal compliance -->
+        <div class="form-section terms-section">
+            <h3>Terms of Service Agreement</h3>
+            <div class="terms-agreement">
+                <div class="form-group checkbox-group">
+                    {{ form.terms_agreement }}
+                    <label for="{{ form.terms_agreement.id_for_label }}" class="checkbox-label">
+                        I have read and agree to the <a href="#" onclick="showTermsOfService(); return false;"
+                            class="terms-link">Terms of Service</a>
+                    </label>
+                    {% if form.terms_agreement.errors %}<div class="error">{{ form.terms_agreement.errors }}</div>{% endif %}
+                </div>
+                <p class="terms-notice">
+                    By checking this box, you acknowledge that you have read, understood, and agree to be bound by our
+                    Terms of Service.
+                    This agreement is required to complete your registration.
+                </p>
+            </div>
+        </div>
+
+        <!-- Privacy Policy Agreement - Required for legal compliance -->
+        <div class="form-section privacy-section">
+            <h3>Privacy Policy Agreement</h3>
+            <div class="privacy-agreement">
+                <div class="form-group checkbox-group">
+                    {{ form.privacy_agreement }}
+                    <label for="{{ form.privacy_agreement.id_for_label }}" class="checkbox-label">
+                        I have read and agree to the <a href="#" onclick="showPrivacyPolicy(); return false;"
+                            class="privacy-link">Privacy Policy</a>
+                    </label>
+                    {% if form.privacy_agreement.errors %}<div class="error">{{ form.privacy_agreement.errors }}</div>{% endif %}
+                </div>
+                <p class="privacy-notice">
+                    By checking this box, you acknowledge that you have read, understood, and agree to our
+                    Privacy Policy regarding the collection, use, and protection of your personal information.
+                    This agreement is required to complete your registration.
+                </p>
+            </div>
+        </div>
+
+        <!-- Results Waiver - Required for data usage consent -->
+        <div class="form-section waiver-section">
+            <h3>Data Usage Consent</h3>
+            <div class="results-waiver">
+                <div class="form-group checkbox-group">
+                    {{ form.results_waiver }}
+                    <label for="{{ form.results_waiver.id_for_label }}" class="checkbox-label">
+                        I consent to the use of my questionnaire responses
+                    </label>
+                    {% if form.results_waiver.errors %}<div class="error">{{ form.results_waiver.errors }}</div>{% endif %}
+                </div>
+                <p class="waiver-notice">
+                    By checking this box, you expressly consent to the collection, storage, and use of your
+                    questionnaire
+                    responses for the purpose of finding compatible matches within the detoX platform. You further
+                    consent to the anonymized use of your responses for research and analysis purposes to improve our
+                    services. Your data will be handled in accordance with our Privacy Policy and stored securely.
+                </p>
+            </div>
+        </div>
+
         <div class="form-actions">
             <button type="submit" class="btn submit">Complete Registration</button>
         </div>
@@ -121,4 +190,16 @@
     </form>
 </section>
 
-{% endblock %}
+<script>
+    function showTermsOfService() {
+        window.open('/terms-of-service/', 'TermsOfService', 'width=800,height=600,scrollbars=yes,resizable=yes');
+    }
+
+    function showPrivacyPolicy() {
+        window.open('/privacy-policy/', 'PrivacyPolicy', 'width=800,height=600,scrollbars=yes,resizable=yes');
+    }
+</script>
+
+
+</body>
+</html>
