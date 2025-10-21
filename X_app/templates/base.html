@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}My Site{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    {% block head %} <meta name="description" content="A brief description of my site."> {% endblock %}
 </head>
 
 <body>
@@ -15,6 +16,7 @@
         <nav>
             <ul>
                 {% if user.is_authenticated %}
+                
                 <li class="nav-item">
                     <a href="{% url 'home' %}">Home</a>
                 </li>

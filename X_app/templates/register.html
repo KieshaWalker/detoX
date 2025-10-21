@@ -1,8 +1,12 @@
-{% extends 'base.html' %} {% load static %} {% block head %}
-<link rel="stylesheet" href="{% static 'css/base.css' %}" />
-{% endblock %} {% block content %}
+{% extends 'base.html' %}
+{% load static %}
 
-<section class="register-section">
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/register.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="invite-section">
     <h2>Enter Your Invitation Code</h2>
     <p>Enter the invitation code you received via email to access the registration questionnaire.</p>
 
@@ -12,16 +16,45 @@
         <input type="text" name="invitation_code" id="id_invitation_code" required
             placeholder="Enter your invitation code" style="text-transform: uppercase;">
 
-        <button type="submit" class="btn submit">Continue to Questionnaire</button>
+        <button type="submit" class="btn btn-primary">Continue to Questionnaire</button>
     </form>
 
     {% if messages %}
     <div class="messages">
         {% for message in messages %}
-        <p class="{% if message.tags %}{{ message.tags }}{% endif %}">{{ message.message }}</p>
+        <div class="message {% if message.tags %}{{ message.tags }}{% endif %}">
+            {{ message.message }}
+        </div>
         {% endfor %}
     </div>
     {% endif %}
 </section>
 
+<section class="invite-info">
+    <h3>What happens next?</h3>
+    <ul>
+        <li>Complete our comprehensive personality questionnaire</li>
+        <li>Get matched with compatible individuals</li>
+        <li>Build meaningful, lasting relationships</li>
+        <li>Join an exclusive community of like-minded people</li>
+    </ul>
+</section>
+
+<section class="register-steps">
+    <div class="step">
+        <div class="step-number">1</div>
+        <h4>Enter Code</h4>
+        <p>Use your invitation code to begin</p>
+    </div>
+    <div class="step">
+        <div class="step-number">2</div>
+        <h4>Complete Profile</h4>
+        <p>Fill out the detailed questionnaire</p>
+    </div>
+    <div class="step">
+        <div class="step-number">3</div>
+        <h4>Get Matched</h4>
+        <p>Find your perfect connections</p>
+    </div>
+</section>
 {% endblock %}

@@ -1,31 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/legal.css' %}" />
+{% endblock %}
+
 {% block content %}
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">
-                    <h2 class="mb-0">Privacy Policy</h2>
-                </div>
-                <div class="card-body">
-                    <pre style="white-space: pre-wrap; font-family: inherit;">{{ privacy_content }}</pre>
-                </div>
-                <div class="card-footer text-center">
-                    <button type="button" class="btn btn-secondary" onclick="window.close()">Close</button>
-                </div>
-            </div>
-        </div>
+<div class="legal-container">
+    <div class="legal-header">
+        <h2>Privacy Policy</h2>
+    </div>
+
+    <div class="legal-content">
+        <pre>{{ privacy_content }}</pre>
+    </div>
+
+    <div class="legal-footer">
+        <button type="button" class="btn secondary" onclick="window.close()">Close</button>
     </div>
 </div>
 {% endblock %}
-
-</body>
-</html>

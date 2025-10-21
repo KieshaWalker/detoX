@@ -1,19 +1,29 @@
-{% extends 'base.html' %} {% load static %} {% block head %}
-<link rel="stylesheet" href="{% static 'css/base.css' %}" />
-{% endblock %} {% block content %}
+{% extends 'base.html' %}
+{% load static %}
 
-<section class="invite-section">
-  <h2>Send Invitation to a Friend</h2>
-  <p>Share detoX with someone special. Include a secret word or sentence they'll recognize!</p>
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/invite.css' %}" />
+{% endblock %}
+
+{% block content %}
+<div class="invite-container">
+  <div class="invite-header">
+    <h2>Send Invitation to a Friend</h2>
+    <p>Share detoX with someone special. Include a secret word or sentence they'll recognize!</p>
+  </div>
 
   <form action="{% url 'invite' %}" method="post" class="invite-form">
     {% csrf_token %}
-    <label for="id_email">Friend's Email Address:</label>
-    <input type="email" name="email" id="id_email" required placeholder="friend@example.com">
+    <div class="form-group">
+      <label for="id_email">Friend's Email Address:</label>
+      <input type="email" name="email" id="id_email" required placeholder="friend@example.com">
+    </div>
 
-    <label for="id_secret_message">Secret Word/Sentence:</label>
-    <input type="text" name="secret_message" id="id_secret_message" required
-      placeholder="Something only they would know..." maxlength="200">
+    <div class="form-group">
+      <label for="id_secret_message">Secret Word/Sentence:</label>
+      <input type="text" name="secret_message" id="id_secret_message" required
+        placeholder="Something only they would know..." maxlength="200">
+    </div>
 
     <button type="submit" class="btn submit">Send Invitation</button>
   </form>
@@ -25,6 +35,5 @@
     {% endfor %}
   </div>
   {% endif %}
-</section>
-
+</div>
 {% endblock %}

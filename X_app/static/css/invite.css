@@ -1,0 +1,228 @@
+/* Invite/Send Invitation Page Styles */
+.invite-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.invite-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.invite-header h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.invite-header p {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+.invite-form {
+    background: var(--bg-primary);
+    padding: 2.5rem;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--border-color);
+    margin-bottom: 2rem;
+}
+
+.invite-form .form-group {
+    margin-bottom: 1.5rem;
+}
+
+.invite-form label {
+    display: block;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+}
+
+.invite-form input[type="email"] {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-md);
+    font-size: 1rem;
+    background: var(--bg-primary);
+    transition: all 0.2s ease;
+}
+
+.invite-form input[type="email"]:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgb(99 102 241 / 0.1);
+}
+
+.invite-form .btn {
+    width: 100%;
+    padding: 0.875rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.invite-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    background: var(--bg-primary);
+    padding: 2rem;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border-color);
+    text-align: center;
+}
+
+.stat-card h3 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+}
+
+.stat-card p {
+    color: var(--text-secondary);
+    font-size: 1rem;
+    margin: 0;
+}
+
+.recent-invitations {
+    background: var(--bg-primary);
+    padding: 2rem;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border-color);
+}
+
+.recent-invitations h3 {
+    color: var(--primary-color);
+    font-size: 1.25rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: 0.75rem;
+}
+
+.invitations-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.invitation-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color);
+    transition: background 0.2s ease;
+}
+
+.invitation-item:last-child {
+    border-bottom: none;
+}
+
+.invitation-item:hover {
+    background: var(--bg-secondary);
+}
+
+.invitation-email {
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.invitation-status {
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.invitation-status.sent {
+    background: rgb(254 243 199);
+    color: rgb(161 98 7);
+}
+
+.invitation-status.used {
+    background: rgb(220 252 231);
+    color: rgb(21 128 61);
+}
+
+.invitation-status.pending {
+    background: rgb(219 234 254);
+    color: rgb(37 99 235);
+}
+
+.invite-tips {
+    background: linear-gradient(135deg, var(--bg-secondary), var(--bg-primary));
+    padding: 2rem;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-color);
+}
+
+.invite-tips h3 {
+    color: var(--primary-color);
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+}
+
+.invite-tips ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.invite-tips li {
+    padding: 0.5rem 0;
+    color: var(--text-secondary);
+    position: relative;
+    padding-left: 1.5rem;
+}
+
+.invite-tips li::before {
+    content: "💡";
+    position: absolute;
+    left: 0;
+    font-size: 1rem;
+}
+
+@media (max-width: 768px) {
+    .invite-container {
+        margin: 1rem auto;
+        padding: 0 0.5rem;
+    }
+
+    .invite-header h2 {
+        font-size: 2rem;
+    }
+
+    .invite-form {
+        padding: 2rem;
+    }
+
+    .invite-stats {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .invitation-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+}

@@ -1,31 +1,127 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Profile</title>
-    <link rel="stylesheet" href="{% static 'css/base.css' %}">
-</head>
-<body>
-   
-    <h1>{{ user.username }}'s Profile</h1>
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/profile.css' %}" />
+{% endblock %}
+
+{% block content %}
+<div class="profile-container">
+    <div class="profile-header">
+        <h2>{{ user.username }}'s Profile</h2>
+        <p>Manage your account settings and view your progress</p>
+    </div>
+
     {% if user.is_authenticated %}
- <nav>
-        <ul>
-            <li><a href="{% url 'home' %}">Home</a></li>
-            <li><a href="{% url 'invite' %}">Send Invitation</a></li>
-        </ul>
-</nav>
+    <div class="profile-content">
+        <div class="profile-sidebar">
+            <div class="profile-avatar">
+                <div class="avatar-circle">{{ user.username|first|upper }}</div>
+                <div class="profile-name">{{ user.username }}</div>
+                <div class="profile-email">{{ user.email }}</div>
+            </div>
+
+            <div class="profile-stats">
+                <div class="stat-item">
+                    <span class="stat-number">0</span>
+                    <span class="stat-label">Assessments</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">0</span>
+                    <span class="stat-label">Friends</span>
+                </div>
+            </div>
+
+            <div class="profile-actions">
+                <a href="{% url 'home' %}" class="btn secondary">Home</a>
+                <a href="{% url 'invite' %}" class="btn secondary">Send Invitation</a>
+                <form method="post" action="{% url 'logout' %}" style="margin: 0;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn danger">Logout</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="profile-main">
+            <div class="profile-section">
+                <h3>Account Settings</h3>
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="id_username">Username:</label>
+                        <input type="text" name="username" id="id_username" value="{{ user.username }}" readonly>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="id_email">Email:</label>
+                        <input type="email" name="email" id="id_email" value="{{ user.email }}" readonly>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn secondary" onclick="enableEdit()">Edit Profile</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="progress-section">
+                <h3>Your Progress</h3>
+                <div class="progress-item">
+                    <h4>Assessment Completion <span class="progress-text">0%</span></h4>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <div class="progress-item">
+                    <h4>Friend Invitations <span class="progress-text">0/5</span></h4>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="achievements">
+                <h3>Achievements</h3>
+                <div class="achievements-grid">
+                    <div class="achievement-item locked">
+
+                        <h4>First Assessment</h4>
+                        <p>Complete your first questionnaire</p>
+                    </div>
+
+                    <div class="achievement-item locked">
+
+                        <h4>Social Butterfly</h4>
+                        <p>Invite 5 friends to join</p>
+                    </div>
+
+                    <div class="achievement-item locked">
+
+                        <h4>Consistency King</h4>
+                        <p>Complete assessments for 7 days</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     {% else %}
-    <p>Please log in to view your profile.</p>
+    <div class="profile-section">
+        <h3>Please log in to view your profile.</h3>
+        <p>You need to be logged in to access your profile and account settings.</p>
+        <a href="{% url 'login' %}" class="btn primary">Login</a>
+    </div>
     {% endif %}
+</div>
 
-    <form method="post" action="{% url 'logout' %}">
-        {% csrf_token %}
-        <button type="submit">Logout</button>
-    </form>
+<script>
+    function enableEdit() {
+        const inputs = document.querySelectorAll('input[readonly]');
+        inputs.forEach(input => input.removeAttribute('readonly'));
+        const button = document.querySelector('.form-actions .btn');
+        button.textContent = 'Save Changes';
+        button.className = 'btn primary';
+        button.type = 'submit';
+    }
+</script>
 
-    
-</body>
-</html>
+{% endblock %}

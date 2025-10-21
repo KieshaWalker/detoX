@@ -9,9 +9,9 @@ class UserProfile(models.Model):
     questionnaire = models.OneToOneField(QuestionnaireResponse, on_delete=models.SET_NULL, null=True, blank=True)
     invitation_code = models.ForeignKey(InvitationCode, on_delete=models.SET_NULL, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    first_name = models.OneToOneField(QuestionnaireResponse, on_delete=models.SET_NULL, null=True, blank=True, related_name='first_name_profile')
-    last_name = models.OneToOneField(QuestionnaireResponse, on_delete=models.SET_NULL, null=True, blank=True, related_name='last_name_profile')
-    email = models.OneToOneField(QuestionnaireResponse, on_delete=models.SET_NULL, null=True, blank=True, related_name='email_profile')
+    first_name = models.CharField(max_length=200, blank=True)
+    last_name = models.CharField(max_length=200, blank=True)
+    email = models.EmailField(blank=True)
 
     
     def __str__(self):

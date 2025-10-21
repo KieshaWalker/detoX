@@ -1,9 +1,58 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+{% endblock %}
 
 {% block content %}
-<section>
-    <h2>Home Page</h2>
-    <p>Welcome to the detoX</p>
-    <p>This is the home page content.</p>
+<section class="hero-section">
+    <h2>Welcome to detoX</h2>
+    <p>Your journey starts here. Join our exclusive community of like-minded individuals.</p>
+</section>
+
+<section class="login-section">
+    {% if not user.is_authenticated %}
+    <a href="{% url 'login' %}" class="btn btn-primary">Login</a>
+    <a href="{% url 'register' %}" class="btn btn-secondary">Register</a>
+    {% else %}
+    <p>Hello, {{ user.username }}! <a href="{% url 'profile' %}">View your profile</a></p>
+    {% endif %}
+</section>
+
+<section class="welcome-card">
+    <h3>About detoX</h3>
+    <p>detoX is a revolutionary platform that connects people through organic, meaningful relationships. Our unique
+        questionnaire-based approach ensures genuine connections that out weigh superficial interactions of our normal
+        social media.
+        Social media thrives off emotional manipulation and advertising revenue, prioritizing profit over people.
+        detoX is changing the game by putting people first.</p>
+</section>
+
+<section class="features-grid">
+    <div class="feature-card">
+        <h4>Deep Compatibility</h4>
+        <p>Our comprehensive questionnaire analyzes personality traits, values, and preferences to find your perfect
+            circle.</p>
+    </div>
+    <div class="feature-card">
+        <h4>Privacy First</h4>
+        <p>Your personal information and responses are protected with enterprise-grade security and privacy measures.
+        </p>
+    </div>
+    <div class="feature-card">
+        <h4>Meaningful Connections</h4>
+        <p>Focus on quality over quantity. We help you build lasting relationships based on shared values and goals.</p>
+    </div>
+</section>
+
+<section class="cta-section">
+    <h3>Ready to Begin Your Journey?</h3>
+    <p>Join our exclusive community and discover connections that truly matter.</p>
+    {% if not user.is_authenticated %}
+    <a href="{% url 'register' %}" class="btn btn-primary">Get Started</a>
+    {% else %}
+    <a href="{% url 'invite' %}" class="btn btn-primary">Invite Others</a>
+    {% endif %}
 </section>
 {% endblock %}

@@ -162,7 +162,10 @@ def questionnaireView(request):
                 UserProfile.objects.create(
                     user=user,
                     questionnaire=questionnaire,
-                    invitation_code=invitation
+                    invitation_code=invitation,
+                    first_name=questionnaire.first_name,
+                    last_name=questionnaire.last_name,
+                    email=questionnaire.email
                 )
 
                 print(f"User profile created linking user {user.username} to questionnaire {questionnaire.id}")
