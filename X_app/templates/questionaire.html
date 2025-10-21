@@ -5,9 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>questionaire</title>
+    <link rel="stylesheet" href="{% static 'css/questionaire.css' %}">
 </head>
 <body>
-
+<div> </div>
 <section class="register-section">
     <h2>Complete Your Registration</h2>
     <p>Please fill out this personal reflection questionnaire to join detoX.</p>
@@ -19,9 +20,15 @@
         <div class="form-section">
             <h3>Basic Information</h3>
             <div class="form-group">
-                <label for="{{ form.full_name.id_for_label }}">Full Name *</label>
-                {{ form.full_name }}
-                {% if form.full_name.errors %}<div class="error">{{ form.full_name.errors }}</div>{% endif %}
+                <label for="{{ form.first_name.id_for_label }}">First Name *</label>
+                {{ form.first_name }}
+                {% if form.first_name.errors %}<div class="error">{{ form.first_name.errors }}</div>{% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.last_name.id_for_label }}">Last Name *</label>
+                {{ form.last_name }}
+                {% if form.last_name.errors %}<div class="error">{{ form.last_name.errors }}</div>{% endif %}
             </div>
 
             <div class="form-group">
