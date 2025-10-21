@@ -1,0 +1,233 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>questionnaire</title>
+    <link rel="stylesheet" href="{% static 'css/questionnaire.css' %}">
+</head>
+
+<body>
+    <div> </div>
+    <section class="register-section">
+        <h2>Complete Your Registration</h2>
+        <p>Please fill out this personal reflection questionnaire to join detoX.</p>
+
+        <form action="{% url 'questionnaire' %}" method="POST" class="register-form">
+            {% csrf_token %}
+
+            <!-- Basic Information -->
+            <div class="form-section">
+                <h3>Basic Information</h3>
+                <div class="form-group">
+                    <label for="{{ form.first_name.id_for_label }}">First Name *</label>
+                    {{ form.first_name }}
+                    {% if form.first_name.errors %}<div class="error">{{ form.first_name.errors }}</div>{% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.last_name.id_for_label }}">Last Name *</label>
+                    {{ form.last_name }}
+                    {% if form.last_name.errors %}<div class="error">{{ form.last_name.errors }}</div>{% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.email.id_for_label }}">Email Address *</label>
+                    {{ form.email }}
+                    {% if form.email.errors %}<div class="error">{{ form.email.errors }}</div>{% endif %}
+                </div>
+            </div>
+
+            <!-- Questionnaire Section -->
+            <div class="form-section">
+                <h3>Personal Reflection Questionnaire</h3>
+
+                <div class="form-group">
+                    <label>Which of the following best describes your motivation in helping others?</label>
+                    {{ form.motivation_help_others }}
+                    {% if form.motivation_help_others.errors %}<div class="error">{{ form.motivation_help_others.errors }}</div>{% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label>How do you view human nature?</label>
+                    {{ form.human_nature_view }}
+                    {% if form.human_nature_view.errors %}<div class="error">{{ form.human_nature_view.errors }}</div>{% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label>Which statement best reflects your belief about fairness?</label>
+                    {{ form.fairness_belief }}
+                    {% if form.fairness_belief.errors %}<div class="error">{{ form.fairness_belief.errors }}</div>{% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label>What drives your long-term goals the most?</label>
+                    {{ form.long_term_goals }}
+                    {% if form.long_term_goals.errors %}<div class="error">{{ form.long_term_goals.errors }}</div>{% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label>How do you typically respond when someone shares a personal struggle with you?</label>
+                    {{ form.response_personal_struggle }}
+                    {% if form.response_personal_struggle.errors %}<div class="error">{{ form.response_personal_struggle.errors }}</div>{% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label>When you witness someone being treated unfairly, what is your first instinct?</label>
+                    {{ form.response_unfair_treatment }}
+                    {% if form.response_unfair_treatment.errors %}<div class="error">{{ form.response_unfair_treatment.errors }}</div>{% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label>How do you define success in life?</label>
+                    {{ form.success_definition }}
+                    {% if form.success_definition.errors %}<div class="error">{{ form.success_definition.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label>What role does forgiveness play in your relationships?</label>
+                    {{ form.forgiveness_role }}
+                    {% if form.forgiveness_role.errors %}<div class="error">{{ form.forgiveness_role.errors }}</div>{% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label>How do you cope with failure or disappointment?</label>
+                    {{ form.coping_failure }}
+                    {% if form.coping_failure.errors %}<div class="error">{{ form.coping_failure.errors }}</div>{% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label>How do you approach learning about different cultures or perspectives?</label>
+                    {{ form.learning_cultures }}
+                    {% if form.learning_cultures.errors %}<div class="error">{{ form.learning_cultures.errors }}</div>{% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label>What does empathy mean to you?</label>
+                    {{ form.empathy_definition }}
+                    {% if form.empathy_definition.errors %}<div class="error">{{ form.empathy_definition.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label>How do you handle situations where your values conflict with someone else's?</label>
+                    {{ form.values_conflict }}
+                    {% if form.values_conflict.errors %}<div class="error">{{ form.values_conflict.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label>What motivates you to help others?</label>
+                    {{ form.help_motivation }}
+                    {% if form.help_motivation.errors %}<div class="error">{{ form.help_motivation.errors }}</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Terms of Service Agreement - Required for legal compliance -->
+            <div class="form-section terms-section">
+                <h3>Terms of Service Agreement</h3>
+                <div class="terms-agreement">
+                    <div class="form-group checkbox-group">
+                        {{ form.terms_agreement }}
+                        <label for="{{ form.terms_agreement.id_for_label }}" class="checkbox-label">
+                            I have read and agree to the <a href="#" onclick="showTermsOfService(); return false;"
+                                class="terms-link">Terms of Service</a>
+                        </label>
+                        {% if form.terms_agreement.errors %}<div class="error">{{ form.terms_agreement.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <p class="terms-notice">
+                        By checking this box, you acknowledge that you have read, understood, and agree to be bound by
+                        our
+                        Terms of Service.
+                        This agreement is required to complete your registration.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Privacy Policy Agreement - Required for legal compliance -->
+            <div class="form-section privacy-section">
+                <h3>Privacy Policy Agreement</h3>
+                <div class="privacy-agreement">
+                    <div class="form-group checkbox-group">
+                        {{ form.privacy_agreement }}
+                        <label for="{{ form.privacy_agreement.id_for_label }}" class="checkbox-label">
+                            I have read and agree to the <a href="#" onclick="showPrivacyPolicy(); return false;"
+                                class="privacy-link">Privacy Policy</a>
+                        </label>
+                        {% if form.privacy_agreement.errors %}<div class="error">{{ form.privacy_agreement.errors }}
+                        </div>{% endif %}
+                    </div>
+                    <p class="privacy-notice">
+                        By checking this box, you acknowledge that you have read, understood, and agree to our
+                        Privacy Policy regarding the collection, use, and protection of your personal information.
+                        This agreement is required to complete your registration.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Results Waiver - Required for data usage consent -->
+            <div class="form-section waiver-section">
+                <h3>Data Usage Consent</h3>
+                <div class="results-waiver">
+                    <div class="form-group checkbox-group">
+                        {{ form.results_waiver }}
+                        <label for="{{ form.results_waiver.id_for_label }}" class="checkbox-label">
+                            I consent to the use of my questionnaire responses
+                        </label>
+                        {% if form.results_waiver.errors %}<div class="error">{{ form.results_waiver.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <p class="waiver-notice">
+                        By checking this box, you expressly consent to the collection, storage, and use of your
+                        questionnaire
+                        responses for the purpose of finding compatible matches within the detoX platform. You further
+                        consent to the anonymized use of your responses for research and analysis purposes to improve
+                        our
+                        services. Your data will be handled in accordance with our Privacy Policy and stored securely.
+                    </p>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn submit" value="save">Complete Registration</button>
+            </div>
+
+            {% if form.non_field_errors %}
+            <div class="error">
+                {% for error in form.non_field_errors %}
+                <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </form>
+    </section>
+
+    <script>
+        function showTermsOfService() {
+            window.open('/terms-of-service/', 'TermsOfService', 'width=800,height=600,scrollbars=yes,resizable=yes');
+            // Auto-check the terms agreement checkbox
+            var termsCheckbox = document.getElementById('{{ form.terms_agreement.id_for_label }}');
+            if (termsCheckbox) {
+                termsCheckbox.checked = true;
+            }
+        }
+
+        function showPrivacyPolicy() {
+            window.open('/privacy-policy/', 'PrivacyPolicy', 'width=800,height=600,scrollbars=yes,resizable=yes');
+            // Auto-check the privacy agreement checkbox
+            var privacyCheckbox = document.getElementById('{{ form.privacy_agreement.id_for_label }}');
+            if (privacyCheckbox) {
+                privacyCheckbox.checked = true;
+            }
+        }
+    </script>
+
+
+</body>
+
+</html>

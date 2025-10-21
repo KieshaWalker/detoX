@@ -1,13 +1,13 @@
 .env
 howto.txt
 legal.txt
-questionaire.txt
+questionnaire.txt
 important.txt
 MVPuserstories.txt
 potential.txt
 erd.txt
 settings.py
-questionaire.html.backup
+questionnaire.html.backup
 
 # Backup files
 *.backup
@@ -20,7 +20,7 @@ terms_of_service.txt
 acknowledgements.txt
 howto.txt
 legal.txt
-questionaire.txt
+questionnaire.txt
 important.txt
 MVPuserstories.txt
 potential.txt

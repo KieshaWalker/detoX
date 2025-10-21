@@ -1,5 +1,10 @@
-SELECT * FROM "X_app_responseanswer";  
+SELECT * FROM "X_app_questionaire";  
 
+SELECT * FROM "X_app_questionnaireresponse";  
+
+SELECT * FROM "X_app_question";
+
+SELECT * FROM "X_app_response";
 
 ---                List of relations
 -- \i data.sql 

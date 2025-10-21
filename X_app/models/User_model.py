@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-from .questionaire_model import QuestionnaireResponse
+from .questionnaire_model import QuestionnaireResponse
 from .models import InvitationCode
 
 class UserProfile(models.Model):
@@ -13,6 +13,7 @@ class UserProfile(models.Model):
     last_name = models.OneToOneField(QuestionnaireResponse, on_delete=models.SET_NULL, null=True, blank=True, related_name='last_name_profile')
     email = models.OneToOneField(QuestionnaireResponse, on_delete=models.SET_NULL, null=True, blank=True, related_name='email_profile')
 
+    
     def __str__(self):
         return f"{self.user.username}'s profile"
 
@@ -135,4 +136,7 @@ class UserCompatibility(models.Model):
         except UserProfile.DoesNotExist:
             pass
 
+    def get_full_name(self):
+        return f"{self.first_name} {self.last_name}"
+            
 

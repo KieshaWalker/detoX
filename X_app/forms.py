@@ -2,12 +2,6 @@ from django import forms
 from .models import QuestionnaireResponse, InvitationCode
 
 class RegistrationForm(forms.ModelForm):
-    invitation_code = forms.CharField(
-        max_length=100,
-        label="Invitation Code",
-        help_text="Enter the invitation code you received via email"
-    )
-
     # Terms of Service Agreement - Required for legal compliance
     terms_agreement = forms.BooleanField(
         required=True,
@@ -41,7 +35,7 @@ class RegistrationForm(forms.ModelForm):
     class Meta:
         model = QuestionnaireResponse
         fields = [
-            'first_name', 'last_name', 'email', 'invitation_code',
+            'first_name', 'last_name', 'email',
             'motivation_help_others', 'human_nature_view', 'fairness_belief',
             'long_term_goals', 'response_personal_struggle', 'response_unfair_treatment',
             'success_definition', 'forgiveness_role', 'coping_failure',
@@ -49,24 +43,11 @@ class RegistrationForm(forms.ModelForm):
         ]
        
 
-    def clean_invitation_code(self):
-        code = self.cleaned_data.get('invitation_code').upper().strip()
-        try:
-            invitation = InvitationCode.objects.get(code=code, used=False)
-        except InvitationCode.DoesNotExist:
-            raise forms.ValidationError("Invalid or already used invitation code.")
-        return invitation
-
     def clean_email(self):
         email = self.cleaned_data.get('email')
         if QuestionnaireResponse.objects.filter(email=email).exists():
             raise forms.ValidationError("This email has already been registered.")
         return email
-    def save(self, commit=True):
-        user = super().save(commit=commit)
-        if commit:
-            user.save()
-        return user
 
 
 login_form = forms.Form()

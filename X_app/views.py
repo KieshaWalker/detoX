@@ -38,7 +38,7 @@ def inviteView(request):
             message = f'''
 Hello!
 
-You've been invited to join detoX by {request.user.get_full_name() or request.user.username},
+You've been invited to join detoX by {request.user.first_name or request.user.username},
 
 They included the following message for you:
 {secret_message}
@@ -86,14 +86,14 @@ def register(request):
 
         # Store the valid invitation code in session and redirect to questionnaire
         request.session['invitation_code'] = invitation_code
-        return redirect('questionaire')
+        return redirect('questionnaire')
 
     return render(request, 'register.html')
 
 def profile(request):
     return render(request, 'profile.html')
 
-def questionaireView(request):
+def questionnaireView(request):
     # Check if user has a valid invitation code in session
     invitation_code = request.session.get('invitation_code')
     if not invitation_code:
@@ -109,42 +109,84 @@ def questionaireView(request):
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
         if form.is_valid():
-            # Create questionnaire response
-            questionnaire = form.save(commit=False)
-            questionnaire.invitation_code = invitation
-            questionnaire.save()
+            # Validate required agreements
+            terms_agreed = form.cleaned_data.get('terms_agreement', False)
+            privacy_agreed = form.cleaned_data.get('privacy_agreement', False)
+            results_consent = form.cleaned_data.get('results_waiver', False)
 
-            # Create user account
-            username = questionnaire.email.split('@')[0] + str(uuid.uuid4())[:4]
-            user = User.objects.create_user(
-                username=username,
-                email=questionnaire.email,
-                first_name=questionnaire.full_name.split()[0] if questionnaire.full_name.split() else '',
-                last_name=' '.join(questionnaire.full_name.split()[1:]) if len(questionnaire.full_name.split()) > 1 else ''
-            )
+            if not terms_agreed:
+                form.add_error('terms_agreement', 'You must agree to the Terms of Service.')
+            elif not privacy_agreed:
+                form.add_error('privacy_agreement', 'You must agree to the Privacy Policy.')
+            elif not results_consent:
+                form.add_error('results_waiver', 'You must consent to the use of your questionnaire responses.')
+            else:
+                # All validations passed, proceed with saving
+                print("=== QUESTIONNAIRE SUBMISSION ===")
+                print(f"Form data: {form.cleaned_data}")
 
-            # Create user profile
-            UserProfile.objects.create(
-                user=user,
-                questionnaire=questionnaire,
-                invitation_code=invitation
-            )
+                # Create questionnaire response
+                questionnaire = form.save(commit=False)
+                questionnaire.invitation_code = invitation
+                questionnaire.save()
 
-            # Mark invitation code as used
-            invitation.used = True
-            invitation.used_by = user
-            invitation.save()
+                print(f"Questionnaire saved with ID: {questionnaire.id}")
+                print(f"User Info: {questionnaire.first_name} {questionnaire.last_name} ({questionnaire.email})")
+                print(f"Motivation: {questionnaire.motivation_help_others}")
+                print(f"Human Nature View: {questionnaire.human_nature_view}")
+                print(f"Fairness Belief: {questionnaire.fairness_belief}")
+                print(f"Long-term Goals: {questionnaire.long_term_goals}")
+                print(f"Response to Personal Struggle: {questionnaire.response_personal_struggle}")
+                print(f"Response to Unfair Treatment: {questionnaire.response_unfair_treatment}")
+                print(f"Success Definition: {questionnaire.success_definition}")
+                print(f"Forgiveness Role: {questionnaire.forgiveness_role}")
+                print(f"Coping with Failure: {questionnaire.coping_failure}")
+                print(f"Learning Cultures: {questionnaire.learning_cultures}")
+                print(f"Empathy Definition: {questionnaire.empathy_definition}")
+                print(f"Values Conflict: {questionnaire.values_conflict}")
+                print(f"Help Motivation: {questionnaire.help_motivation}")
+                print(f"Invitation Code: {questionnaire.invitation_code.code}")
 
-            # Clear session and log the user in
-            del request.session['invitation_code']
-            login(request, user)
+                # Create user account
+                username = questionnaire.email.split('@')[0] + str(uuid.uuid4())[:4]
+                user = User.objects.create_user(
+                    username=username,
+                    email=questionnaire.email,
+                    first_name=questionnaire.first_name,
+                    last_name=questionnaire.last_name
+                )
 
-            messages.success(request, 'Registration successful! Welcome to detoX.')
-            return redirect('home')
+                print(f"User account created: {user.username} (ID: {user.id})")
+
+                # Create user profile
+                UserProfile.objects.create(
+                    user=user,
+                    questionnaire=questionnaire,
+                    invitation_code=invitation
+                )
+
+                print(f"User profile created linking user {user.username} to questionnaire {questionnaire.id}")
+
+                # Mark invitation code as used
+                invitation.used = True
+                invitation.used_by = user
+                invitation.save()
+
+                print(f"Invitation code {invitation.code} marked as used by {user.username}")
+
+                # Clear session and log the user in
+                del request.session['invitation_code']
+                login(request, user)
+
+                print(f"User {user.username} logged in successfully")
+                print("=== SUBMISSION COMPLETE ===")
+
+                messages.success(request, 'Registration successful! Welcome to detoX.')
+                return redirect('home')
     else:
         form = RegistrationForm()
 
-    return render(request, 'questionaire.html', {'form': form})
+    return render(request, 'questionnaire.html', {'form': form})
 
 
 def terms_of_service(request):
