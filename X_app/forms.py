@@ -1,7 +1,16 @@
 from django import forms
+from django.contrib.auth.models import User
 from .models import QuestionnaireResponse, InvitationCode
 
 class RegistrationForm(forms.ModelForm):
+    # Username field - allow users to choose their own username
+    username = forms.CharField(
+        max_length=150,
+        required=True,
+        label="Choose a username",
+        help_text="Choose a unique username for your account",
+        widget=forms.TextInput(attrs={'placeholder': 'Enter your desired username'})
+    )
     # Terms of Service Agreement - Required for legal compliance
     terms_agreement = forms.BooleanField(
         required=True,
@@ -35,7 +44,7 @@ class RegistrationForm(forms.ModelForm):
     class Meta:
         model = QuestionnaireResponse
         fields = [
-            'first_name', 'last_name', 'email',
+            'username', 'first_name', 'last_name', 'email',
             'motivation_help_others', 'human_nature_view', 'fairness_belief',
             'long_term_goals', 'response_personal_struggle', 'response_unfair_treatment',
             'success_definition', 'forgiveness_role', 'coping_failure',
@@ -48,6 +57,17 @@ class RegistrationForm(forms.ModelForm):
         if QuestionnaireResponse.objects.filter(email=email).exists():
             raise forms.ValidationError("This email has already been registered.")
         return email
+
+    def clean_username(self):
+        username = self.cleaned_data.get('username')
+        if User.objects.filter(username=username).exists():
+            raise forms.ValidationError("This username is already taken. Please choose a different one.")
+        # Additional validation for username format
+        if not username.replace('_', '').replace('-', '').isalnum():
+            raise forms.ValidationError("Username can only contain letters, numbers, underscores, and hyphens.")
+        if len(username) < 3:
+            raise forms.ValidationError("Username must be at least 3 characters long.")
+        return username
 
 
 login_form = forms.Form()

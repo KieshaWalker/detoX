@@ -5,18 +5,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Your Invitations{% endblock %}</title>
+    <title>Your Invitations</title>
     <link rel="stylesheet" href="{% static 'css/tree.css' %}">
-    {% block head %}{% endblock %}
 </head>
 
 <body>
-    {% block header %}
+    {% include 'navbar.html' %}
     <header>
-        <h1>Welcome to detoX</h1>
-        {% include 'navbar.html' %}
+        <h1>detoX</h1>
     </header>
-    {% endblock %}
 
     <main>
         {% block content %}
@@ -31,6 +28,15 @@
                         <div class="invite-email">{{ invite.email }}</div>
                         <div class="invite-date">Invited on: {{ invite.invited_at|date:"M d, Y" }}</div>
                         <div class="invite-code">Code: {{ invite.invite_code.code }}</div>
+                        {% if invite.invite_code.used %}
+                        <div class="invite-status status-registered">
+                            Registered as: {{ invite.invite_code.used_by.username }}
+                        </div>
+                        {% else %}
+                        <div class="invite-status status-pending">
+                            Invitation pending
+                        </div>
+                        {% endif %}
                     </div>
                     {% endfor %}
                 </div>

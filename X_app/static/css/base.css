@@ -13,8 +13,18 @@
     --starfield-purple: #2c2c54;
     --cosmic-indigo: #3b3b7a;
 
-    /* Neon Accents - Electric & Welcoming */
+    /* Neon Accents - Electric */
+    --neon-cyan: #2c737b;
+    --neon-magenta: #662766;
+    --neon-electric: #1e3939;
+    --neon-purple: #34194d;
+    --neon-pink: #3f192d;
+    --neon-lime: #1f4c35;
+    --neon-gold: #4c4419;
 
+    /* Primary & Accent Colors (for compatibility) */
+    --primary-color: var(--neon-cyan);
+    --accent-color: var(--neon-magenta);
 
     /* Warm Welcoming Tones */
     --cosmic-warm: #e8f4fd;

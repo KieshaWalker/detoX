@@ -1,9 +1,16 @@
-{% extends 'first_contact/base.html' %}
 {% load static %}
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    
 {% block head %}
 <link rel="stylesheet" href="{% static 'css/legal.css' %}" />
 {% endblock %}
+</head>
+<body>
 
 {% block content %}
 <div class="legal-container">
@@ -19,4 +26,7 @@
         <button type="button" class="btn secondary" onclick="window.close()">Close</button>
     </div>
 </div>
+
 {% endblock %}
+</body>
+</html>

@@ -8,6 +8,40 @@ SELECT * FROM "X_app_response";
 
 SELECT * FROM "X_app_invitationcode";
 
+-- Find UNUSED invitation codes (where used = false)
+SELECT 
+    id,
+    code,
+    invited_by_id,
+    used,
+    used_by_id,
+    created_at
+FROM "X_app_invitationcode" 
+WHERE used = false 
+ORDER BY created_at DESC;
+
+-- Alternative: Find invitation codes that have NOT been used
+SELECT * FROM "X_app_invitationcode" WHERE used = 'f' OR used = 0;
+
+-- Count of used vs unused invitation codes
+SELECT 
+    used,
+    COUNT(*) as count
+FROM "X_app_invitationcode" 
+GROUP BY used;
+
+-- Detailed view of unused codes with inviter information
+SELECT 
+    ic.id,
+    ic.code,
+    ic.created_at,
+    au.username as invited_by_username,
+    au.email as invited_by_email
+FROM "X_app_invitationcode" ic
+LEFT JOIN auth_user au ON ic.invited_by_id = au.id
+WHERE ic.used = false
+ORDER BY ic.created_at DESC;
+
 ---                List of relations
 -- \i data.sql 
 --- \dt 

@@ -325,3 +325,19 @@
         width: 100%;
     }
 }
+
+
+.logout-form {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-sm);
+    border-radius: var(--radius-md);
+    padding: 0.5rem 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    transition: background 0.2s ease;
+    z-index: 1000;
+}

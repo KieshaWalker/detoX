@@ -150,8 +150,8 @@ def questionnaireView(request):
                 print(f"Help Motivation: {questionnaire.help_motivation}")
                 print(f"Invitation Code: {questionnaire.invitation_code.code}")
 
-                # Create user account
-                username = questionnaire.email.split('@')[0] + str(uuid.uuid4())[:4]
+                # Create user account with chosen username
+                username = form.cleaned_data['username']
                 user = User.objects.create_user(
                     username=username,
                     email=questionnaire.email,

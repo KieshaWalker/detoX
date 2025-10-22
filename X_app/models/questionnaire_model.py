@@ -6,6 +6,7 @@ class QuestionnaireResponse(models.Model):
     # Basic info
     first_name = models.CharField(max_length=200)
     last_name = models.CharField(max_length=200)
+    username = models.CharField(max_length=150, unique=True)
     email = models.EmailField(unique=True)
     invitation_code = models.ForeignKey(InvitationCode, on_delete=models.CASCADE)
 
