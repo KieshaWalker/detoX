@@ -1,18 +1,54 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Invitations</title>
+    <title>{% block title %}Your Invitations{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/tree.css' %}">
+    {% block head %}{% endblock %}
 </head>
+
 <body>
-    <h1>Your Invitations</h1>
-    <ul>
-        <li>Invitation 1</li>
-        <li>Invitation 2</li>
-        <li>Invitation 3</li>
-    </ul>
+    {% block header %}
+    <header>
+        <h1>Welcome to detoX</h1>
+        {% include 'navbar.html' %}
+    </header>
+    {% endblock %}
+
+    <main>
+        {% block content %}
+        <section>
+            <div class="invite-list-container">
+                <h2>{{ title }}</h2>
+
+                {% if invites %}
+                <div class="invite-list">
+                    {% for invite in invites %}
+                    <div class="invite-item">
+                        <div class="invite-email">{{ invite.email }}</div>
+                        <div class="invite-date">Invited on: {{ invite.invited_at|date:"M d, Y" }}</div>
+                        <div class="invite-code">Code: {{ invite.invite_code.code }}</div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="no-invites">You haven't sent any invitations yet.</p>
+                <a href="{% url 'invite' %}" class="btn-primary">Send Your First Invitation</a>
+                {% endif %}
+            </div>
+        </section>
+        {% endblock %}
+    </main>
+
+    {% block footer %}
+    <footer>
+        <p>&copy; 2025</p>
+    </footer>
+    {% endblock %}
+
 </body>
+
 </html>

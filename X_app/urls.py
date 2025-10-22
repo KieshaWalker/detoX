@@ -1,6 +1,7 @@
 from django.urls import path
 from django.contrib.auth.views import LoginView, LogoutView
 from . import views
+from .models.invite_tree.views_list import list_invites
 
 urlpatterns = [
     path('accounts/logout/', LogoutView.as_view(next_page='home'), name='logout'),
@@ -12,5 +13,5 @@ urlpatterns = [
     path('questionnaire/', views.questionnaireView, name='questionnaire'),
     path('terms-of-service/', views.terms_of_service, name='terms_of_service'),
     path('privacy-policy/', views.privacy_policy, name='privacy_policy'),
-    path('invite/list/', views.invites, name='invite_list'),
+    path('invite/list/', list_invites, name='invite_list'),
 ]

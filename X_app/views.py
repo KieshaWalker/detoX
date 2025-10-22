@@ -5,7 +5,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.auth import login
 import uuid
-from .models import InvitationCode, UserProfile
+from .models import InvitationCode, UserProfile, InviteList
 from .forms import RegistrationForm
 
 
@@ -30,7 +30,10 @@ def inviteView(request):
         invitation_code = str(uuid.uuid4())[:8].upper()
 
         # Save to database
-        InvitationCode.objects.create(code=invitation_code, invited_by=request.user)
+        invitation_code_obj = InvitationCode.objects.create(code=invitation_code, invited_by=request.user)
+
+        # Create invite list entry
+        InviteList.objects.create(inviter=request.user, invite_code=invitation_code_obj, email=email)
 
         # Send email with secret message
         try:
@@ -278,8 +281,3 @@ def privacy_policy(request):
         'title': 'Privacy Policy'
     })
 
-
-def invites(request):
-    return render(request, 'app_/invite_list/treeList.html', {
-        'title': 'Your Invitations'
-    })

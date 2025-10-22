@@ -1,0 +1,39 @@
+{% load static %}
+<nav>
+    <ul>
+        {% if user.is_authenticated %}
+        {% if request.resolver_match.url_name != 'home' %}
+        <li class="nav-item">
+            <a href="{% url 'home' %}">Home</a>
+        </li>
+        {% endif %}
+        {% if request.resolver_match.url_name != 'invite' %}
+        <li class="nav-item">
+            <a href="{% url 'invite' %}">Send Invitation</a>
+        </li>
+        {% endif %}
+        {% if request.resolver_match.url_name != 'invite_list' %}
+        <li class="nav-item">
+            <a href="{% url 'invite_list' %}">My Invitations</a>
+        </li>
+        {% endif %}
+        <li>
+            <form id="logout-form" method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit">Log out</button>
+            </form>
+        </li>
+        {% else %}
+        {% if request.resolver_match.url_name != 'login' %}
+        <li class="nav-item">
+            <a href="{% url 'login' %}">Login</a>
+        </li>
+        {% endif %}
+        {% if request.resolver_match.url_name != 'register' %}
+        <li class="nav-item">
+            <a href="{% url 'register' %}">Enter Invitation Code</a>
+        </li>
+        {% endif %}
+        {% endif %}
+    </ul>
+</nav>
