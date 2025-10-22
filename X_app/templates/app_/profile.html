@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'first_contact/base.html' %}
 {% load static %}
 
 {% block head %}
@@ -117,6 +117,7 @@
     function enableEdit() {
         const inputs = document.querySelectorAll('input[readonly]');
         inputs.forEach(input => input.removeAttribute('readonly'));
+        inputs.forEach(input => input.classList.add('editable'));
         const button = document.querySelector('.form-actions .btn');
         button.textContent = 'Save Changes';
         button.className = 'btn primary';

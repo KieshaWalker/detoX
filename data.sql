@@ -44,3 +44,8 @@ SELECT * FROM "X_app_response";
  --public | main_app_habit              | table | k
  --public | main_app_journalentry       | table | k
  --public | main_app_userprofile       | table | k
+
+
+ -- to run this database file, use the command:
+ -- \i data.sql
+

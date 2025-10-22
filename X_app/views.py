@@ -12,7 +12,7 @@ from .forms import RegistrationForm
 # Create your views here.
 
 def home(request):
-    return render(request, 'home.html')
+    return render(request, 'first_contact/home.html')
 
 def inviteView(request):
     if not request.user.is_authenticated:
@@ -67,7 +67,7 @@ Lets detoX!,
 
         return redirect('invite')
 
-    return render(request, 'invite.html')
+    return render(request, 'app_/invite.html')
 
 def register(request):
     if request.method == 'POST':
@@ -88,10 +88,10 @@ def register(request):
         request.session['invitation_code'] = invitation_code
         return redirect('questionnaire')
 
-    return render(request, 'register.html')
+    return render(request, 'requests_/register.html')
 
 def profile(request):
-    return render(request, 'profile.html')
+    return render(request, 'app_/profile.html')
 
 def questionnaireView(request):
     # Check if user has a valid invitation code in session
@@ -189,7 +189,7 @@ def questionnaireView(request):
     else:
         form = RegistrationForm()
 
-    return render(request, 'questionnaire.html', {'form': form})
+    return render(request, 'requests_/questionnaire.html', {'form': form})
 
 
 def terms_of_service(request):
