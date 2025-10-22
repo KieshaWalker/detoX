@@ -6,6 +6,8 @@ SELECT * FROM "X_app_question";
 
 SELECT * FROM "X_app_response";
 
+SELECT * FROM "X_app_invitationcode";
+
 ---                List of relations
 -- \i data.sql 
 --- \dt 

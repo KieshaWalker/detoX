@@ -14,13 +14,7 @@
     --cosmic-indigo: #3b3b7a;
 
     /* Neon Accents - Electric & Welcoming */
-    --neon-cyan: #00d4ff;
-    --neon-magenta: #ff0080;
-    --neon-electric: #00ffff;
-    --neon-purple: #b026ff;
-    --neon-pink: #ff6b9d;
-    --neon-lime: #4bff87;
-    --neon-gold: #ffd166;
+
 
     /* Warm Welcoming Tones */
     --cosmic-warm: #e8f4fd;
@@ -316,19 +310,6 @@ nav form {
     margin: 0;
 }
 
-nav button {
-    background: var(--gradient-cosmic);
-    color: white;
-    border: none;
-    padding: 0.75rem 1.5rem;
-    border-radius: var(--radius-md);
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: var(--shadow-glow);
-    position: relative;
-    overflow: hidden;
-}
 
 nav button::before {
     content: '';
@@ -508,7 +489,6 @@ a:hover {
 .btn.secondary {
     background: var(--glass-soft);
     color: var(--text-primary);
-    border: 1px solid var(--border-color);
     backdrop-filter: blur(10px);
 }
 

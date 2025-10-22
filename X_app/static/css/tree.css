@@ -1,0 +1,130 @@
+/* Space-Tech Base Styles for detoX - Where Stars Meet Hearts */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+}
+
+:root {
+    /* Deep Space Color Palette */
+    --cosmic-black: #011638;
+    --nebula-dark: #03120e;
+    --void-blue: #536878;
+    --starfield-purple: #3e505b;
+    --cosmic-indigo: #3b3b7a;
+
+    /* Neon Accents - Electric & Welcoming */
+
+
+    /* Warm Welcoming Tones */
+    --cosmic-warm: #e8f4fd;
+    --nebula-light: #f0f4ff;
+    --star-white: #ffffff;
+    --gentle-blue: #a8d8ff;
+    --soft-purple: #d4bfff;
+
+    /* Text Colors */
+    --text-primary: var(--star-white);
+    --text-secondary: var(--gentle-blue);
+    --text-light: var(--soft-purple);
+    --text-muted: rgba(168, 216, 255, 0.6);
+
+    /* Backgrounds */
+    --bg-primary: var(--nebula-dark);
+    --bg-secondary: var(--void-blue);
+    --bg-tertiary: var(--starfield-purple);
+    --bg-accent: var(--cosmic-indigo);
+    --bg-warm: linear-gradient(135deg, var(--nebula-light) 0%, var(--cosmic-warm) 100%);
+
+    /* Borders & Shadows */
+    --border-color: rgba(0, 212, 255, 0.2);
+    --border-glow: rgba(0, 212, 255, 0.4);
+    --shadow-sm: 0 2px 8px rgba(0, 212, 255, 0.1);
+    --shadow-md: 0 8px 24px rgba(0, 212, 255, 0.15);
+    --shadow-lg: 0 16px 48px rgba(0, 212, 255, 0.2);
+    --shadow-glow: 0 0 20px rgba(0, 212, 255, 0.3);
+    --shadow-inner: inset 0 0 30px rgba(0, 212, 255, 0.15);
+
+    /* Radii */
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 20px;
+    --radius-xl: 32px;
+
+    /* Gradients */
+    --gradient-cosmic: linear-gradient(135deg, var(--neon-cyan) 0%, var(--neon-purple) 50%, var(--neon-magenta) 100%);
+    --gradient-warm: linear-gradient(135deg, var(--gentle-blue) 0%, var(--soft-purple) 100%);
+    --gradient-space: linear-gradient(180deg, var(--cosmic-black) 0%, var(--nebula-dark) 50%, var(--void-blue) 100%);
+    --gradient-nebula: radial-gradient(circle at 30% 40%, var(--neon-purple), transparent 70%),
+        radial-gradient(circle at 70% 60%, var(--neon-cyan), transparent 70%),
+        radial-gradient(circle at 50% 80%, var(--neon-magenta), transparent 70%);
+    --gradient-aurora: linear-gradient(135deg, rgba(0, 212, 255, 0.4) 0%, rgba(35, 7, 21, 0.35) 50%, rgba(75, 255, 135, 0.45) 100%);
+    --gradient-supernova: conic-gradient(from 180deg at 50% 50%, rgba(0, 212, 255, 0.5), rgba(176, 38, 255, 0.4), rgba(255, 107, 157, 0.45), rgba(0, 212, 255, 0.5));
+
+    /* Glass & Aura Helpers */
+    --glass-soft: rgba(18, 22, 38, 0.7);
+    --glass-strong: rgba(26, 30, 52, 0.85);
+    --aurora-cyan: rgba(0, 212, 255, 0.25);
+    --aurora-magenta: rgba(255, 0, 128, 0.25);
+    --aurora-lime: rgba(75, 255, 135, 0.35);
+    --grid-line: rgba(0, 212, 255, 0.08);
+}
+
+html {
+    font-family: 'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    line-height: 1.6;
+    color: var(--text-primary);
+    background: var(--gradient-space);
+    background-attachment: fixed;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+body {
+    background: transparent;
+    font-size: 16px;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    position: relative;
+}
+
+
+/* Add subtle starfield background */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image:
+        radial-gradient(2px 2px at 20px 30px, var(--neon-cyan), transparent),
+        radial-gradient(2px 2px at 40px 70px, var(--neon-magenta), transparent),
+        radial-gradient(1px 1px at 90px 40px, var(--neon-purple), transparent),
+        radial-gradient(1px 1px at 130px 80px, var(--neon-cyan), transparent),
+        radial-gradient(2px 2px at 160px 30px, var(--soft-purple), transparent);
+    background-repeat: repeat;
+    background-size: 200px 100px;
+    opacity: 0.1;
+    pointer-events: none;
+    z-index: -1;
+    animation: starDrift 55s linear infinite;
+}
+
+body::after {
+    content: '';
+    position: fixed;
+    inset: -15% -10% 0;
+    background: var(--gradient-aurora);
+    opacity: 0.22;
+    filter: blur(140px) saturate(120%);
+    pointer-events: none;
+    z-index: -2;
+    animation: auroraDrift 24s ease-in-out infinite alternate;
+}

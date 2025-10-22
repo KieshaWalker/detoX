@@ -278,3 +278,8 @@ def privacy_policy(request):
         'title': 'Privacy Policy'
     })
 
+
+def invites(request):
+    return render(request, 'app_/invite_list/treeList.html', {
+        'title': 'Your Invitations'
+    })
