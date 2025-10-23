@@ -97,6 +97,7 @@ WSGI_APPLICATION = 'detoX.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+<<<<<<< HEAD
 if 'ON_HEROKU' in os.environ:
     DATABASES = {
         "default": dj_database_url.config(
@@ -104,6 +105,16 @@ if 'ON_HEROKU' in os.environ:
             conn_max_age=600,
             conn_health_checks=True,
             ssl_require=True,
+=======
+if os.getenv('ON_HEROKU') == 'True':
+    # On Heroku, use the Heroku Postgres database
+    heroku_url = os.getenv('HEROKU_POSTGRESQL_ONYX_URL')
+    DATABASES = {
+        "default": dj_database_url.parse(
+            heroku_url,
+            conn_max_age=600,
+            conn_health_checks=True,
+>>>>>>> parent of e2e3783 (Hardcode Heroku Postgres database configuration)
         ),
     }
 else:
