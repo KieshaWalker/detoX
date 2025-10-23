@@ -114,6 +114,9 @@ if os.getenv('ON_HEROKU') == 'True':
             heroku_url,
             conn_max_age=600,
             conn_health_checks=True,
+<<<<<<< HEAD
+>>>>>>> parent of e2e3783 (Hardcode Heroku Postgres database configuration)
+=======
 >>>>>>> parent of e2e3783 (Hardcode Heroku Postgres database configuration)
         ),
     }
