@@ -95,13 +95,22 @@ WSGI_APPLICATION = 'detoX.wsgi.application'
 DATABASE_URL = os.getenv('DATABASE_URL')
 HEROKU_ENV = os.getenv('DYNO') or os.getenv('HEROKU_APP_NAME')
 
-if DATABASE_URL:
+if DATABASE_URL and HEROKU_ENV:  # Only use SSL for Heroku
     DATABASES = {
         "default": dj_database_url.config(
             default=DATABASE_URL,
             conn_max_age=600,
             conn_health_checks=True,
             ssl_require=True,
+        ),
+    }
+elif DATABASE_URL:  # Local DATABASE_URL without SSL
+    DATABASES = {
+        "default": dj_database_url.config(
+            default=DATABASE_URL,
+            conn_max_age=600,
+            conn_health_checks=True,
+            ssl_require=False,  # No SSL for local databases
         ),
     }
 else:
