@@ -96,16 +96,21 @@ WSGI_APPLICATION = 'detoX.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-heroku_url = os.getenv('DATABASE_URL')
-if heroku_url:
+if 'ON_HEROKU' in os.environ:
     DATABASES = {
-        'default': dj_database_url.parse(heroku_url, conn_max_age=600)
+        "default": dj_database_url.config(
+            env='DATABASE_URL',
+            conn_max_age=600,
+            conn_health_checks=True,
+            ssl_require=True,
+        ),
     }
 else:
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'habits',
+            # The value of 'NAME' should match the value of 'NAME' you replaced.
         }
     }
 

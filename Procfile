@@ -1,2 +1,2 @@
-release: python manage.py migrate  # Runs during release phase
+release: python manage.py migrate
 web: gunicorn detoX.wsgi:application
