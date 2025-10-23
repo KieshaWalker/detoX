@@ -106,7 +106,10 @@ else:
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
             'NAME': 'habits',
-            # The value of 'NAME' should match the value of 'NAME' you replaced.
+            'USER': 'k',
+            'PASSWORD': 'your_db_password',
+            'HOST': 'localhost',
+            'PORT': '5432',
         }
     }
 
