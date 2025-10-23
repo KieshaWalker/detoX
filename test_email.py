@@ -23,17 +23,46 @@ def test_email_config():
     print("🔧 Testing detoX Email Configuration")
     print("=" * 40)
 
+    # Debug environment detection
+    on_heroku = os.getenv('ON_HEROKU') == 'True'
+    print(f"🌐 Environment: {'Heroku Production' if on_heroku else 'Local Development'}")
+    print(f"📊 ON_HEROKU: {os.getenv('ON_HEROKU')}")
+    print(f"🏭 DYNO: {os.getenv('DYNO')}")
+    print()
+
     # Check configuration
     print(f"📧 Email Backend: {settings.EMAIL_BACKEND}")
-    print(f"🏠 Email Host: {settings.EMAIL_HOST}")
-    print(f"🔌 Email Port: {settings.EMAIL_PORT}")
-    print(f"🔒 Use TLS: {settings.EMAIL_USE_TLS}")
-    print(f"👤 Email User: {settings.EMAIL_HOST_USER}")
+    if hasattr(settings, 'MAILGUN_ACCESS_KEY'):
+        print(f"🔑 Mailgun API Key: {'Set' if settings.MAILGUN_ACCESS_KEY else 'Not Set'}")
+    if hasattr(settings, 'MAILGUN_SERVER_NAME'):
+        print(f"� Mailgun Domain: {settings.MAILGUN_SERVER_NAME}")
+    print(f"�🏠 Email Host: {getattr(settings, 'EMAIL_HOST', 'N/A')}")
+    print(f"🔌 Email Port: {getattr(settings, 'EMAIL_PORT', 'N/A')}")
+    print(f"🔒 Use TLS: {getattr(settings, 'EMAIL_USE_TLS', 'N/A')}")
+    print(f"👤 Email User: {getattr(settings, 'EMAIL_HOST_USER', 'N/A')}")
     print(f"📤 From Email: {settings.DEFAULT_FROM_EMAIL}")
     print()
 
-    # Test email sending
-    if settings.EMAIL_HOST_USER and settings.EMAIL_HOST_PASSWORD:
+    # Test email sending based on backend
+    can_send = False
+    if settings.EMAIL_BACKEND == 'django_mailgun.MailgunBackend':
+        can_send = hasattr(settings, 'MAILGUN_ACCESS_KEY') and settings.MAILGUN_ACCESS_KEY
+        print(f"🔍 Mailgun API Key present: {hasattr(settings, 'MAILGUN_ACCESS_KEY')}")
+        print(f"🔍 Mailgun API Key value: {'Set' if hasattr(settings, 'MAILGUN_ACCESS_KEY') and settings.MAILGUN_ACCESS_KEY else 'Not Set'}")
+        if not can_send:
+            print("⚠️  Mailgun API key not configured!")
+            print("Please check your MAILGUN_ACCESS_KEY environment variable")
+    else:
+        can_send = settings.EMAIL_HOST_USER and settings.EMAIL_HOST_PASSWORD
+        if not can_send:
+            print("⚠️  Email credentials not configured!")
+            print("Please set EMAIL_HOST_USER and EMAIL_HOST_PASSWORD in your .env file")
+            print("For Gmail setup instructions, see the README.md file")
+
+    print(f"📊 Can send email: {can_send}")
+    print()
+
+    if can_send:
         print("📤 Attempting to send test email...")
 
         try:
