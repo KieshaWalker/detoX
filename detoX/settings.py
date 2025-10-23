@@ -92,10 +92,11 @@ WSGI_APPLICATION = 'detoX.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-if 'DATABASE_URL' in os.environ:
+DATABASE_URL = os.getenv('DATABASE_URL')
+if DATABASE_URL:
     DATABASES = {
         "default": dj_database_url.config(
-            env='DATABASE_URL',
+            default=DATABASE_URL,
             conn_max_age=600,
             conn_health_checks=True,
             ssl_require=True,
