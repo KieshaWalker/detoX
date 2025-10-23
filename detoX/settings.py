@@ -93,6 +93,8 @@ WSGI_APPLICATION = 'detoX.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 DATABASE_URL = os.getenv('DATABASE_URL')
+HEROKU_ENV = os.getenv('DYNO') or os.getenv('HEROKU_APP_NAME')
+
 if DATABASE_URL:
     DATABASES = {
         "default": dj_database_url.config(
