@@ -20,7 +20,8 @@ load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
+MAILGUN_DOMAIN = os.getenv("MAILGUN_DOMAIN", "")
+MAILGUN_API_KEY = os.getenv("MAILGUN_API_KEY", "")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -157,22 +158,28 @@ SESSION_COOKIE_AGE = 86400  # 24 hours for development
 # Email settings
 if os.getenv('ON_HEROKU') == 'True':
     # Use Mailgun SMTP on Heroku
-    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-    EMAIL_HOST = 'smtp.mailgun.org'
-    EMAIL_PORT = 587
-    EMAIL_USE_TLS = True
-    EMAIL_HOST_USER = f'postmaster@{os.getenv("MAILGUN_DOMAIN")}'
-    EMAIL_HOST_PASSWORD = os.getenv('MAILGUN_SMTP_PASSWORD', '')
-    DEFAULT_FROM_EMAIL = f'noreply@{os.getenv("MAILGUN_DOMAIN")}'
+    EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+    EMAIL_HOST = os.getenv("MAILGUN_SMTP_SERVER", "smtp.mailgun.org")
+    EMAIL_PORT = env_int("MAILGUN_SMTP_PORT", 587)
+    # Mailgun typically uses TLS on port 587
+    EMAIL_USE_TLS = env_bool("MAILGUN_SMTP_TLS", True)
+    # MAILGUN_SMTP_LOGIN is usually 'postmaster@<domain>' but fallback to postmaster@MAILGUN_DOMAIN
+    EMAIL_HOST_USER = os.getenv("MAILGUN_SMTP_LOGIN", f"postmaster@{MAILGUN_DOMAIN}" if MAILGUN_DOMAIN else "")
+    EMAIL_HOST_PASSWORD = os.getenv("MAILGUN_SMTP_PASSWORD", "")
+    DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", f"noreply@{MAILGUN_DOMAIN}" if MAILGUN_DOMAIN else "webmaster@localhost")
+    
+
 else:
-    # Use SMTP locally (Gmail)
-    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-    EMAIL_HOST = os.getenv('EMAIL_HOST', 'smtp.gmail.com')
-    EMAIL_PORT = int(os.getenv('EMAIL_PORT', '587'))
-    EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', 'True').lower() == 'true'
-    EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', '')
-    EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', '')
-    DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', EMAIL_HOST_USER)
+    # Local development (Gmail, or any SMTP you configure)
+    EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+    EMAIL_HOST = os.getenv("EMAIL_HOST", "smtp.gmail.com")
+    EMAIL_PORT = env_int("EMAIL_PORT", 587)
+    EMAIL_USE_TLS = env_bool("EMAIL_USE_TLS", True)
+    EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", "")
+    EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "")
+    DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", EMAIL_HOST_USER or "webmaster@localhost")
+
+# Confi
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
