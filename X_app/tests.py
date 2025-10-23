@@ -10,6 +10,7 @@ from django.test import TestCase
 #         self.assertTrue(form.is_valid()) --- IGNORE ---
 #     def test_invitation_form_invalid(self): --- IGNORE ---
 #         form_data = {'email': 'invalid-email'} --- IGNORE ---
+
 #         form = InvitationForm(data=form_data) --- IGNORE ---
 #         self.assertFalse(form.is_valid()) --- IGNORE ---      
 # class InvitationModelTest(TestCase): --- IGNORE ---
