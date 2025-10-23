@@ -96,16 +96,13 @@ WSGI_APPLICATION = 'detoX.wsgi.application'
 if os.getenv('ON_HEROKU') == 'True':
     # On Heroku, use the Heroku Postgres database
     heroku_url = os.getenv('HEROKU_POSTGRESQL_ONYX_URL')
-    print(f"DEBUG: Using Heroku Postgres URL: {heroku_url}")
     DATABASES = {
-        "default": dj_database_url.config(
-            default=heroku_url,
+        "default": dj_database_url.parse(
+            heroku_url,
             conn_max_age=600,
             conn_health_checks=True,
-            ssl_require=True,
         ),
     }
-    print(f"DEBUG: DATABASES configured: {DATABASES}")
 else:
     # Local development
     DATABASES = {
