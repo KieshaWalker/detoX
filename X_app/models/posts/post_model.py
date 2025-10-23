@@ -16,13 +16,19 @@ class Post(models.Model):
         on_delete=models.CASCADE,
         related_name='posts'
     )
-    
+
 
     # Content fields
     caption = models.TextField(
         max_length=2200,  # Instagram's limit
         blank=True,
         help_text="Post caption/description"
+    )
+    
+    # Legacy content field for database compatibility
+    content = models.TextField(
+        blank=True,
+        help_text="Legacy content field"
     )
 
     # Media fields

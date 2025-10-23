@@ -93,14 +93,16 @@ class PostCreateView(LoginRequiredMixin, CreateView):
     """Create a new post with media upload"""
     model = Post
     template_name = 'posts/post_form.html'
-    fields = ['caption', 'privacy', 'location', 'hashtags']
+    fields = ['caption', 'content', 'privacy', 'location', 'hashtags']
     success_url = reverse_lazy('posts:post_list')
 
     def form_valid(self, form):
         form.instance.author = self.request.user
         
         # Set content field to match caption (for database compatibility)
-        form.instance.content = form.cleaned_data.get('caption', '')
+        caption_value = form.cleaned_data.get('caption', '')
+        form.instance.content = caption_value
+        print(f"DEBUG: Setting content to: '{caption_value}'")  # Debug print
 
         # Handle hashtags
         hashtags_text = form.cleaned_data.get('hashtags', '')
