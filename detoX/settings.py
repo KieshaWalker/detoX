@@ -92,31 +92,19 @@ WSGI_APPLICATION = 'detoX.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-DATABASE_URL = os.getenv('DATABASE_URL')
-ON_HEROKU = os.getenv('DYNO') or os.getenv('HEROKU_SLUG_COMMIT')
 
-if 'ON_HEROKU' in os.environ:
-    # On Heroku, use the Heroku Postgres URL if available, otherwise fall back to DATABASE_URL
-    heroku_postgres_url = os.getenv('HEROKU_POSTGRESQL_ONYX_URL')
-    if heroku_postgres_url:
-        DATABASES = {
-            "default": dj_database_url.config(
-                default=heroku_postgres_url,
-                conn_max_age=600,
-                conn_health_checks=True,
-                ssl_require=True,
-            ),
-        }
-    else:
-        DATABASES = {
-            "default": dj_database_url.config(
-                default=DATABASE_URL,
-                conn_max_age=600,
-                conn_health_checks=True,
-                ssl_require=True,
-            ),
-        }
+if os.getenv('ON_HEROKU') == 'True':
+    # On Heroku, use the Heroku Postgres database
+    DATABASES = {
+        "default": dj_database_url.config(
+            default=os.getenv('HEROKU_POSTGRESQL_ONYX_URL'),
+            conn_max_age=600,
+            conn_health_checks=True,
+            ssl_require=True,
+        ),
+    }
 else:
+    # Local development
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
