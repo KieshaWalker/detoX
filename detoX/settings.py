@@ -93,18 +93,30 @@ WSGI_APPLICATION = 'detoX.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 DATABASE_URL = os.getenv('DATABASE_URL')
-HEROKU_ENV = os.getenv('DYNO') or os.getenv('HEROKU_APP_NAME')
+ON_HEROKU = os.getenv('DYNO') or os.getenv('HEROKU_SLUG_COMMIT')
 
-if DATABASE_URL and HEROKU_ENV:  # Only use SSL for Heroku
-    DATABASES = {
-        "default": dj_database_url.config(
-            default=DATABASE_URL,
-            conn_max_age=600,
-            conn_health_checks=True,
-            ssl_require=True,
-        ),
-    }
-elif DATABASE_URL:  # Local DATABASE_URL without SSL
+if ON_HEROKU:
+    # On Heroku - DATABASE_URL should be provided by Heroku Postgres
+    if DATABASE_URL:
+        DATABASES = {
+            "default": dj_database_url.config(
+                default=DATABASE_URL,
+                conn_max_age=600,
+                conn_health_checks=True,
+                ssl_require=True,
+            ),
+        }
+    else:
+        # Fallback if DATABASE_URL is not set on Heroku
+        DATABASES = {
+            "default": dj_database_url.config(
+                conn_max_age=600,
+                conn_health_checks=True,
+                ssl_require=True,
+            ),
+        }
+elif DATABASE_URL:
+    # Local development with DATABASE_URL set
     DATABASES = {
         "default": dj_database_url.config(
             default=DATABASE_URL,
@@ -114,6 +126,7 @@ elif DATABASE_URL:  # Local DATABASE_URL without SSL
         ),
     }
 else:
+    # Local development fallback
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
