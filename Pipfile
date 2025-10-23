@@ -4,14 +4,15 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-django = "*"
-psycopg2-binary = "*"
-python-dotenv = "*"
-whitenoise = "*"
-gunicorn = "*"
-dj-database-url = "*"
+django = "==5.2.7"
+psycopg2-binary = "==2.9.11"
+python-dotenv = "==1.1.1"
+whitenoise = "==6.11.0"
+gunicorn = "==23.0.0"
+dj-database-url = "==3.0.1"
+pillow = "==12.0.0"
 
 [dev-packages]
 
 [requires]
-python_version = "3.9"
+python_version = "3.11"
