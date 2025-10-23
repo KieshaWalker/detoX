@@ -100,9 +100,7 @@ class PostCreateView(LoginRequiredMixin, CreateView):
         form.instance.author = self.request.user
         
         # Set content field to match caption (for database compatibility)
-        caption_value = form.cleaned_data.get('caption', '')
-        form.instance.content = caption_value
-        print(f"DEBUG: Setting content to: '{caption_value}'")  # Debug print
+        form.instance.content = form.cleaned_data.get('caption', '')
 
         # Handle hashtags
         hashtags_text = form.cleaned_data.get('hashtags', '')
@@ -143,7 +141,7 @@ class PostCreateView(LoginRequiredMixin, CreateView):
         for media_file in media_files:
             PostMedia.objects.create(
                 post=post,
-                file=media_file,
+                media_file=media_file,
                 media_type=self._get_media_type(media_file)
             )
 
