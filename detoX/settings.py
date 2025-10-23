@@ -15,9 +15,8 @@ import os
 import dj_database_url
 
 # Load environment variables only in development
-if not os.getenv('ON_HEROKU'):
-    from dotenv import load_dotenv
-    load_dotenv()
+from dotenv import load_dotenv
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -30,7 +29,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv( 'DEBUG', 'False').lower() == 'true'
 if not 'ON_HEROKU' in os.environ:
     DEBUG = True 
 
