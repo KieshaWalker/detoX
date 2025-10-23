@@ -3,7 +3,6 @@ from django.contrib.auth.models import User
 from .models import QuestionnaireResponse, InvitationCode
 
 class RegistrationForm(forms.ModelForm):
-    # Username field - allow users to choose their own username
     username = forms.CharField(
         max_length=150,
         required=True,

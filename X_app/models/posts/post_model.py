@@ -6,10 +6,6 @@ import uuid
 
 
 class Post(models.Model):
-    """
-    Main Post model inspired by Instagram and TikTok features.
-    Supports text, images, videos, and various social media interactions.
-    """
 
     # Unique identifier
     id = models.AutoField(primary_key=True)
