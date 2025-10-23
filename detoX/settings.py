@@ -95,13 +95,18 @@ WSGI_APPLICATION = 'detoX.wsgi.application'
 
 if os.getenv('ON_HEROKU') == 'True':
     # On Heroku, use the Heroku Postgres database
-    heroku_url = os.getenv('HEROKU_POSTGRESQL_ONYX_URL')
     DATABASES = {
-        "default": dj_database_url.parse(
-            heroku_url,
-            conn_max_age=600,
-            conn_health_checks=True,
-        ),
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'd7h3marfa2evee',
+            'USER': 'u83cc7msi5mu8q',
+            'PASSWORD': 'pdab5309a889249840bdd37d73211b49dc4b15d3c7afa3ec3eba2226170bad63e',
+            'HOST': 'ca8lne8pi75f88.cluster-czrs8kj4isg7.us-east-1.rds.amazonaws.com',
+            'PORT': '5432',
+            'OPTIONS': {
+                'sslmode': 'require',
+            },
+        }
     }
 else:
     # Local development
