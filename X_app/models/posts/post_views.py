@@ -98,6 +98,9 @@ class PostCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.author = self.request.user
+        
+        # Set content field to match caption (for database compatibility)
+        form.instance.content = form.cleaned_data.get('caption', '')
 
         # Handle hashtags
         hashtags_text = form.cleaned_data.get('hashtags', '')

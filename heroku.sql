@@ -36,3 +36,10 @@ FROM "X_app_invitationcode" ic
 LEFT JOIN auth_user au ON ic.invited_by_id = au.id
 WHERE ic.used = false
 ORDER BY ic.created_at DESC;
+
+
+
+
+SELECT * FROM "X_app_post";
+
+
