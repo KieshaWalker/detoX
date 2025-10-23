@@ -119,10 +119,10 @@ elif DATABASE_URL:
     # Local development with DATABASE_URL set
     DATABASES = {
         "default": dj_database_url.config(
-            default=DATABASE_URL,
+            env='DATABASE_URL',
             conn_max_age=600,
             conn_health_checks=True,
-            ssl_require=False,  # No SSL for local databases
+            ssl_require=True,
         ),
     }
 else:
