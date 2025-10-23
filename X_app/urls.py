@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from django.contrib.auth.views import LoginView, LogoutView
 from . import views
 from .models.invite_tree.views_list import list_invites
@@ -14,4 +14,7 @@ urlpatterns = [
     path('terms-of-service/', views.terms_of_service, name='terms_of_service'),
     path('privacy-policy/', views.privacy_policy, name='privacy_policy'),
     path('invite/list/', list_invites, name='invite_list'),
+
+    # Posts URLs
+    path('posts/', include('X_app.models.posts.urls')),
 ]

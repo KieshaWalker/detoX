@@ -1,0 +1,387 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ post.author.get_full_name|default:post.author.username }}'s Post{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <!-- Post Card -->
+            <div class="card post-detail-card">
+                <div class="card-header d-flex align-items-center">
+                    <img src="{% if post.author.userprofile.avatar %}{{ post.author.userprofile.avatar.url }}{% else %}{% static 'images/default-avatar.png' %}{% endif %}"
+                        class="rounded-circle me-3" width="50" height="50" alt="Avatar">
+                    <div class="flex-grow-1">
+                        <h5 class="mb-0">
+                            <a href="{% url 'posts:user_posts' post.author.username %}" class="text-decoration-none">
+                                {{ post.author.get_full_name|default:post.author.username }}
+                            </a>
+                        </h5>
+                        <small class="text-muted">
+                            {{ post.created_at|date:"F j, Y" }} at {{ post.created_at|time:"g:i A" }}
+                            {% if post.location %} • {{ post.location }}{% endif %}
+                        </small>
+                    </div>
+                    {% if post.author == user %}
+                    <div class="dropdown">
+                        <button class="btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-ellipsis-h"></i>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{% url 'posts:post_edit' post.pk %}">Edit Post</a></li>
+                            <li><a class="dropdown-item text-danger" href="{% url 'posts:post_delete' post.pk %}">Delete
+                                    Post</a></li>
+                        </ul>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="card-body">
+                    {% if post.caption %}
+                    <p class="card-text fs-5">{{ post.caption|linebreaks }}</p>
+                    {% endif %}
+
+                    <!-- Main Media -->
+                    {% if post.image %}
+                    <div class="post-media mb-4">
+                        <img src="{{ post.image.url }}" class="img-fluid rounded" alt="Post image">
+                    </div>
+                    {% elif post.video %}
+                    <div class="post-media mb-4">
+                        <video class="w-100 rounded" controls>
+                            <source src="{{ post.video.url }}" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                    {% endif %}
+
+                    <!-- Additional Media -->
+                    {% if post.post_media.all %}
+                    <div class="additional-media mb-4">
+                        <h6 class="mb-3">Additional Media</h6>
+                        <div class="row g-3">
+                            {% for media in post.post_media.all %}
+                            <div class="col-md-6">
+                                {% if media.media_type == 'image' %}
+                                <img src="{{ media.file.url }}" class="img-fluid rounded" alt="Media">
+                                {% elif media.media_type == 'video' %}
+                                <video class="w-100 rounded" controls>
+                                    <source src="{{ media.file.url }}" type="video/mp4">
+                                </video>
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <!-- Hashtags -->
+                    {% if post.hashtags %}
+                    <div class="hashtags mb-4">
+                        {% for hashtag in post.hashtags.split ',' %}
+                        {% if hashtag %}
+                        <a href="{% url 'posts:hashtag_posts' hashtag|slice:'1:' %}"
+                            class="badge bg-primary text-decoration-none me-2 mb-2">
+                            #{{ hashtag|slice:'1:' }}
+                        </a>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
+                    <!-- Engagement Stats -->
+                    <div class="d-flex justify-content-between align-items-center mb-3 p-3 bg-light rounded">
+                        <div class="engagement-stats">
+                            <span class="me-4">
+                                <i class="fas fa-heart text-danger"></i>
+                                <span id="like-count">{{ like_count }}</span> likes
+                            </span>
+                            <span class="me-4">
+                                <i class="fas fa-comment"></i>
+                                <span id="comment-count">{{ post.comments_count }}</span> comments
+                            </span>
+                            <span>
+                                <i class="fas fa-eye"></i>
+                                {{ post.views_count }} views
+                            </span>
+                        </div>
+                        {% if post.privacy != 'public' %}
+                        <span class="badge bg-secondary">
+                            {% if post.privacy == 'friends' %}
+                            <i class="fas fa-user-friends"></i> Friends Only
+                            {% elif post.privacy == 'private' %}
+                            <i class="fas fa-lock"></i> Private
+                            {% endif %}
+                        </span>
+                        {% endif %}
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="action-buttons mb-4">
+                        <button class="btn btn-lg btn-outline-danger like-btn {% if is_liked %}liked{% endif %}"
+                            id="like-btn" data-post-id="{{ post.id }}">
+                            <i class="fas fa-heart"></i>
+                            <span class="like-text">{% if is_liked %}Unlike{% else %}Like{% endif %}</span>
+                        </button>
+                        <button class="btn btn-lg btn-outline-secondary comment-btn">
+                            <i class="fas fa-comment"></i> Comment
+                        </button>
+                        <button class="btn btn-lg btn-outline-secondary share-btn">
+                            <i class="fas fa-share"></i> Share
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Comments Section -->
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Comments ({{ post.comments_count }})</h5>
+                </div>
+                <div class="card-body">
+                    <!-- Add Comment Form -->
+                    <div class="add-comment d-flex mb-4">
+                        <img src="{% if user.userprofile.avatar %}{{ user.userprofile.avatar.url }}{% else %}{% static 'images/default-avatar.png' %}{% endif %}"
+                            class="rounded-circle me-3" width="40" height="40" alt="Your avatar">
+                        <div class="flex-grow-1">
+                            <form id="comment-form" class="d-flex">
+                                <input type="text" class="form-control me-2" id="comment-input"
+                                    placeholder="Write a comment..." maxlength="500">
+                                <button type="submit" class="btn btn-primary" id="submit-comment-btn">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Comments List -->
+                    <div id="comments-list">
+                        {% for comment in comments %}
+                        <div class="comment d-flex mb-3" data-comment-id="{{ comment.id }}">
+                            <img src="{% if comment.author.userprofile.avatar %}{{ comment.author.userprofile.avatar.url }}{% else %}{% static 'images/default-avatar.png' %}{% endif %}"
+                                class="rounded-circle me-3" width="40" height="40" alt="Avatar">
+                            <div class="flex-grow-1">
+                                <div class="bg-light rounded p-3">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <strong>{{ comment.author.get_full_name|default:comment.author.username
+                                            }}</strong>
+                                        <small class="text-muted">{{ comment.created_at|timesince }} ago</small>
+                                    </div>
+                                    <p class="mb-0">{{ comment.content|linebreaks }}</p>
+                                </div>
+                                {% if comment.author == user %}
+                                <div class="mt-1">
+                                    <button class="btn btn-sm btn-outline-danger delete-comment-btn"
+                                        data-comment-id="{{ comment.id }}">
+                                        <i class="fas fa-trash"></i> Delete
+                                    </button>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% empty %}
+                        <div class="text-center py-4">
+                            <i class="fas fa-comments fa-2x text-muted mb-2"></i>
+                            <p class="text-muted mb-0">No comments yet. Be the first to comment!</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Back to Feed -->
+            <div class="text-center mt-4">
+                <a href="{% url 'posts:post_list' %}" class="btn btn-outline-primary">
+                    <i class="fas fa-arrow-left"></i> Back to Feed
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const postId = '{{ post.id }}';
+        const likeBtn = document.getElementById('like-btn');
+        const likeCount = document.getElementById('like-count');
+        const commentForm = document.getElementById('comment-form');
+        const commentInput = document.getElementById('comment-input');
+        const submitCommentBtn = document.getElementById('submit-comment-btn');
+        const commentsList = document.getElementById('comments-list');
+
+        // Like/Unlike functionality
+        likeBtn.addEventListener('click', function () {
+            fetch(`/posts/${postId}/like/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        likeBtn.classList.toggle('liked');
+                        likeBtn.querySelector('.like-text').textContent = data.liked ? 'Unlike' : 'Like';
+                        likeCount.textContent = data.like_count;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred. Please try again.');
+                });
+        });
+
+        // Comment submission
+        commentForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const content = commentInput.value.trim();
+
+            if (!content) {
+                alert('Please enter a comment.');
+                return;
+            }
+
+            submitCommentBtn.disabled = true;
+            submitCommentBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+
+            fetch(`/posts/${postId}/comment/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                },
+                body: JSON.stringify({ content: content })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        commentInput.value = '';
+                        // Add new comment to the list
+                        addCommentToList(data.comment);
+                        // Update comment count
+                        document.getElementById('comment-count').textContent = data.comment_count;
+                    } else {
+                        alert(data.error || 'Failed to post comment.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred. Please try again.');
+                })
+                .finally(() => {
+                    submitCommentBtn.disabled = false;
+                    submitCommentBtn.innerHTML = '<i class="fas fa-paper-plane"></i>';
+                });
+        });
+
+        function addCommentToList(comment) {
+            const commentHtml = `
+            <div class="comment d-flex mb-3" data-comment-id="${comment.id}">
+                <img src="${comment.author_avatar || '{% static "images/default-avatar.png" %}'}"
+                     class="rounded-circle me-3" width="40" height="40" alt="Avatar">
+                <div class="flex-grow-1">
+                    <div class="bg-light rounded p-3">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <strong>${comment.author}</strong>
+                            <small class="text-muted">just now</small>
+                        </div>
+                        <p class="mb-0">${comment.content}</p>
+                    </div>
+                </div>
+            </div>
+        `;
+
+            // Remove empty state if it exists
+            const emptyState = commentsList.querySelector('.text-center');
+            if (emptyState) {
+                emptyState.remove();
+            }
+
+            // Add new comment at the top
+            commentsList.insertAdjacentHTML('afterbegin', commentHtml);
+        }
+
+        // Delete comment functionality
+        document.addEventListener('click', function (e) {
+            if (e.target.classList.contains('delete-comment-btn') || e.target.closest('.delete-comment-btn')) {
+                const btn = e.target.classList.contains('delete-comment-btn') ? e.target : e.target.closest('.delete-comment-btn');
+                const commentId = btn.dataset.commentId;
+
+                if (confirm('Are you sure you want to delete this comment?')) {
+                    // For now, just remove from DOM. In a real app, you'd make an API call
+                    btn.closest('.comment').remove();
+                    // Update comment count
+                    const currentCount = parseInt(document.getElementById('comment-count').textContent);
+                    document.getElementById('comment-count').textContent = Math.max(0, currentCount - 1);
+                }
+            }
+        });
+
+        // Focus comment input when comment button is clicked
+        document.querySelector('.comment-btn').addEventListener('click', function () {
+            commentInput.focus();
+        });
+    });
+</script>
+
+<style>
+    .post-detail-card {
+        border: 1px solid #e1e8ed;
+        border-radius: 12px;
+    }
+
+    .post-media img,
+    .post-media video {
+        max-height: 600px;
+        object-fit: cover;
+    }
+
+    .like-btn.liked {
+        color: #dc3545;
+        border-color: #dc3545;
+        background-color: rgba(220, 53, 69, 0.1);
+    }
+
+    .action-buttons .btn {
+        margin-right: 12px;
+        border-radius: 8px;
+    }
+
+    .hashtags .badge:hover {
+        background-color: #0056b3 !important;
+    }
+
+    .comment .bg-light {
+        border-radius: 12px;
+    }
+
+    .add-comment .form-control {
+        border-radius: 20px;
+    }
+
+    .add-comment .btn {
+        border-radius: 20px;
+        width: 50px;
+    }
+
+    @media (max-width: 768px) {
+        .container {
+            padding: 0 15px;
+        }
+
+        .action-buttons .btn {
+            font-size: 0.9rem;
+            padding: 0.5rem 1rem;
+            margin-right: 8px;
+        }
+
+        .post-media img,
+        .post-media video {
+            max-height: 400px;
+        }
+    }
+</style>
+{% endblock %}

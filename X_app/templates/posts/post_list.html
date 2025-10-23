@@ -1,0 +1,357 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Main Feed -->
+        <div class="col-md-8">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1>{{ page_title }}</h1>
+                <a href="{% url 'posts:post_create' %}" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Create Post
+                </a>
+            </div>
+
+            {% for post in posts %}
+            <div class="card mb-4 post-card" data-post-id="{{ post.id }}">
+                <div class="card-header d-flex align-items-center">
+                    <img src="{% if post.author.userprofile.avatar %}{{ post.author.userprofile.avatar.url }}{% else %}{% static 'images/default-avatar.png' %}{% endif %}"
+                        class="rounded-circle me-3" width="40" height="40" alt="Avatar">
+                    <div>
+                        <h6 class="mb-0">
+                            <a href="{% url 'posts:user_posts' post.author.username %}" class="text-decoration-none">
+                                {{ post.author.get_full_name|default:post.author.username }}
+                            </a>
+                        </h6>
+                        <small class="text-muted">{{ post.created_at|timesince }} ago</small>
+                    </div>
+                    {% if post.author == user %}
+                    <div class="dropdown ms-auto">
+                        <button class="btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-ellipsis-h"></i>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{% url 'posts:post_edit' post.pk %}">Edit</a></li>
+                            <li><a class="dropdown-item text-danger"
+                                    href="{% url 'posts:post_delete' post.pk %}">Delete</a></li>
+                        </ul>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="card-body">
+                    {% if post.caption %}
+                    <p class="card-text">{{ post.caption|linebreaks }}</p>
+                    {% endif %}
+
+                    {% if post.location %}
+                    <p class="text-muted mb-2">
+                        <i class="fas fa-map-marker-alt"></i> {{ post.location }}
+                    </p>
+                    {% endif %}
+
+                    <!-- Main Media -->
+                    {% if post.image %}
+                    <div class="post-media mb-3">
+                        <img src="{{ post.image.url }}" class="img-fluid rounded" alt="Post image">
+                    </div>
+                    {% elif post.video %}
+                    <div class="post-media mb-3">
+                        <video class="w-100 rounded" controls>
+                            <source src="{{ post.video.url }}" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                    {% endif %}
+
+                    <!-- Additional Media -->
+                    {% if post.post_media.all %}
+                    <div class="additional-media mb-3">
+                        <div class="row g-2">
+                            {% for media in post.post_media.all %}
+                            <div class="col-md-6">
+                                {% if media.media_type == 'image' %}
+                                <img src="{{ media.file.url }}" class="img-fluid rounded" alt="Media">
+                                {% elif media.media_type == 'video' %}
+                                <video class="w-100 rounded" controls>
+                                    <source src="{{ media.file.url }}" type="video/mp4">
+                                </video>
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <!-- Hashtags -->
+                    {% if post.hashtags %}
+                    <div class="hashtags mb-3">
+                        <small class="text-muted">{{ post.hashtags }}</small>
+                    </div>
+                    {% endif %}
+
+                    <!-- Engagement Stats -->
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <div class="engagement-stats">
+                            <span class="me-3">
+                                <i class="fas fa-heart text-danger"></i>
+                                <span class="like-count">{{ post.likes_count }}</span> likes
+                            </span>
+                            <span class="me-3">
+                                <i class="fas fa-comment"></i>
+                                <span class="comment-count">{{ post.comments_count }}</span> comments
+                            </span>
+                            <span>
+                                <i class="fas fa-eye"></i>
+                                {{ post.views_count }} views
+                            </span>
+                        </div>
+                        {% if post.privacy != 'public' %}
+                        <span class="badge bg-secondary">
+                            {% if post.privacy == 'friends' %}
+                            <i class="fas fa-user-friends"></i> Friends
+                            {% elif post.privacy == 'private' %}
+                            <i class="fas fa-lock"></i> Private
+                            {% endif %}
+                        </span>
+                        {% endif %}
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="action-buttons">
+                        <button class="btn btn-sm btn-outline-danger like-btn" data-post-id="{{ post.id }}">
+                            <i class="fas fa-heart"></i>
+                            <span class="like-text">Like</span>
+                            <span class="like-count">({{ post.like_count }})</span>
+                        </button>
+                        <button class="btn btn-sm btn-outline-secondary comment-toggle-btn"
+                            data-post-id="{{ post.id }}">
+                            <i class="fas fa-comment"></i> Comment
+                            <span class="comment-count">({{ post.comment_count }})</span>
+                        </button>
+                        <button class="btn btn-sm btn-outline-secondary share-btn">
+                            <i class="fas fa-share"></i> Share
+                        </button>
+                    </div>
+
+                    <!-- Comments Section -->
+                    <div class="comments-section mt-3" id="comments-{{ post.id }}" style="display: none;">
+                        <div class="comments-list mb-3" id="comments-list-{{ post.id }}">
+                            {% for comment in post.comments.all|slice:":3" %}
+                            <div class="comment d-flex mb-2">
+                                <img src="{% if comment.author.userprofile.avatar %}{{ comment.author.userprofile.avatar.url }}{% else %}{% static 'images/default-avatar.png' %}{% endif %}"
+                                    class="rounded-circle me-2" width="32" height="32" alt="Avatar">
+                                <div class="flex-grow-1">
+                                    <div class="bg-light rounded p-2">
+                                        <strong>{{ comment.author.get_full_name|default:comment.author.username
+                                            }}</strong>
+                                        <p class="mb-0">{{ comment.content }}</p>
+                                    </div>
+                                    <small class="text-muted">{{ comment.created_at|timesince }} ago</small>
+                                </div>
+                            </div>
+                            {% endfor %}
+                            {% if post.comments.count > 3 %}
+                            <button class="btn btn-sm btn-link load-more-comments" data-post-id="{{ post.id }}">
+                                View all {{ post.comments.count }} comments
+                            </button>
+                            {% endif %}
+                        </div>
+
+                        <!-- Add Comment Form -->
+                        <div class="add-comment d-flex">
+                            <img src="{% if user.userprofile.avatar %}{{ user.userprofile.avatar.url }}{% else %}{% static 'images/default-avatar.png' %}{% endif %}"
+                                class="rounded-circle me-2" width="32" height="32" alt="Your avatar">
+                            <div class="flex-grow-1">
+                                <div class="input-group">
+                                    <input type="text" class="form-control comment-input"
+                                        placeholder="Write a comment..." data-post-id="{{ post.id }}">
+                                    <button class="btn btn-primary submit-comment-btn"
+                                        data-post-id="{{ post.id }}">Post</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="text-center py-5">
+                <i class="fas fa-images fa-3x text-muted mb-3"></i>
+                <h4>No posts yet</h4>
+                <p class="text-muted">Be the first to share something!</p>
+                <a href="{% url 'posts:post_create' %}" class="btn btn-primary">Create Your First Post</a>
+            </div>
+            {% endfor %}
+
+            <!-- Pagination -->
+            {% if is_paginated %}
+            <nav aria-label="Post pagination" class="mt-4">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                    </li>
+                    {% endif %}
+
+                    {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                    <li class="page-item active">
+                        <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                    </li>
+                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %} <li class="page-item">
+                        <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                        </li>
+                        {% endif %}
+                        {% endfor %}
+
+                        {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                        </li>
+                        {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-md-4">
+            <!-- Trending Hashtags -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Trending</h5>
+                </div>
+                <div class="card-body">
+                    {% for hashtag in popular_hashtags %}
+                    <a href="{% url 'posts:hashtag_posts' hashtag.name %}" class="d-block mb-2 text-decoration-none">
+                        #{{ hashtag.name }}
+                        <small class="text-muted">{{ hashtag.posts_count }} posts</small>
+                    </a>
+                    {% endfor %}
+                    <a href="{% url 'posts:explore_posts' %}" class="btn btn-outline-primary btn-sm mt-2">Explore
+                        More</a>
+                </div>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Your Activity</h5>
+                </div>
+                <div class="card-body">
+                    <p class="mb-1"><strong>Posts:</strong> {{ user.posts.count }}</p>
+                    <p class="mb-1"><strong>Likes Given:</strong> {{ user.likes_given.count }}</p>
+                    <p class="mb-0"><strong>Comments:</strong> {{ user.comments.count }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript for interactive features -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Like/Unlike functionality
+        document.querySelectorAll('.like-btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const postId = this.dataset.postId;
+                const likeText = this.querySelector('.like-text');
+                const likeCount = this.closest('.post-card').querySelector('.like-count');
+
+                fetch(`/posts/${postId}/like/`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                    }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            this.classList.toggle('liked');
+                            likeText.textContent = data.liked ? 'Unlike' : 'Like';
+                            likeCount.textContent = data.like_count;
+                        }
+                    });
+            });
+        });
+
+        // Comment toggle
+        document.querySelectorAll('.comment-toggle-btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const postId = this.dataset.postId;
+                const commentsSection = document.getElementById(`comments-${postId}`);
+                commentsSection.style.display = commentsSection.style.display === 'none' ? 'block' : 'none';
+            });
+        });
+
+        // Submit comment
+        document.querySelectorAll('.submit-comment-btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const postId = this.dataset.postId;
+                const input = this.closest('.input-group').querySelector('.comment-input');
+                const content = input.value.trim();
+
+                if (!content) return;
+
+                fetch(`/posts/${postId}/comment/`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                    },
+                    body: JSON.stringify({ content: content })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            input.value = '';
+                            // Refresh comments section
+                            location.reload();
+                        }
+                    });
+            });
+        });
+    });
+</script>
+
+<style>
+    .post-card {
+        border: 1px solid #e1e8ed;
+        border-radius: 12px;
+    }
+
+    .post-media img,
+    .post-media video {
+        max-height: 500px;
+        object-fit: cover;
+    }
+
+    .like-btn.liked {
+        color: #dc3545;
+        border-color: #dc3545;
+    }
+
+    .action-buttons .btn {
+        margin-right: 8px;
+    }
+
+    .hashtags a:hover {
+        text-decoration: underline !important;
+    }
+
+    @media (max-width: 768px) {
+        .container-fluid {
+            padding: 0 15px;
+        }
+
+        .action-buttons .btn {
+            font-size: 0.8rem;
+            padding: 0.25rem 0.5rem;
+        }
+    }
+</style>
+{% endblock %}

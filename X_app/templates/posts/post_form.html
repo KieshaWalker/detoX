@@ -1,0 +1,280 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Create Post{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="mb-0">Create New Post</h3>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data" id="post-form">
+                        {% csrf_token %}
+
+                        <!-- Caption -->
+                        <div class="mb-3">
+                            <label for="{{ form.caption.id_for_label }}" class="form-label">Caption</label>
+                            {{ form.caption }}
+                            <div class="form-text">Share what's on your mind...</div>
+                        </div>
+
+                        <!-- Media Upload -->
+                        <div class="mb-3">
+                            <label class="form-label">Media</label>
+                            <div class="media-upload-area border border-2 border-dashed rounded p-4 text-center mb-3"
+                                id="media-upload-area">
+                                <i class="fas fa-cloud-upload-alt fa-2x text-muted mb-2"></i>
+                                <p class="mb-2">Drag & drop images or videos here, or click to browse</p>
+                                <input type="file" id="media-files" name="media_files[]" multiple
+                                    accept="image/*,video/*" style="display: none;">
+                                <button type="button" class="btn btn-outline-primary" id="browse-btn">Browse
+                                    Files</button>
+                            </div>
+
+                            <!-- Main Image Preview -->
+                            <div id="image-preview" class="d-none">
+                                <h6>Main Image:</h6>
+                                <img id="image-preview-img" class="img-fluid rounded mb-2" style="max-height: 300px;">
+                                <input type="file" name="image" accept="image/*" class="form-control">
+                            </div>
+
+                            <!-- Main Video Preview -->
+                            <div id="video-preview" class="d-none">
+                                <h6>Main Video:</h6>
+                                <video id="video-preview-video" controls class="w-100 rounded mb-2"
+                                    style="max-height: 300px;"></video>
+                                <input type="file" name="video" accept="video/*" class="form-control">
+                            </div>
+
+                            <!-- Additional Media Preview -->
+                            <div id="additional-media-preview"></div>
+                        </div>
+
+                        <!-- Location -->
+                        <div class="mb-3">
+                            <label for="{{ form.location.id_for_label }}" class="form-label">Location (Optional)</label>
+                            {{ form.location }}
+                            <div class="form-text">Where was this taken?</div>
+                        </div>
+
+                        <!-- Hashtags -->
+                        <div class="mb-3">
+                            <label for="{{ form.hashtags.id_for_label }}" class="form-label">Hashtags</label>
+                            {{ form.hashtags }}
+                            <div class="form-text">Separate multiple hashtags with commas (e.g., travel, photography,
+                                nature)</div>
+                        </div>
+
+                        <!-- Privacy -->
+                        <div class="mb-3">
+                            <label for="{{ form.privacy.id_for_label }}" class="form-label">Privacy</label>
+                            {{ form.privacy }}
+                        </div>
+
+                        <!-- Submit Buttons -->
+                        <div class="d-flex justify-content-between">
+                            <a href="{% url 'posts:post_list' %}" class="btn btn-outline-secondary">Cancel</a>
+                            <button type="submit" class="btn btn-primary" id="submit-btn">
+                                <i class="fas fa-paper-plane"></i> Post
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const mediaUploadArea = document.getElementById('media-upload-area');
+        const mediaFilesInput = document.getElementById('media-files');
+        const browseBtn = document.getElementById('browse-btn');
+        const imagePreview = document.getElementById('image-preview');
+        const videoPreview = document.getElementById('video-preview');
+        const additionalMediaPreview = document.getElementById('additional-media-preview');
+
+        let selectedFiles = [];
+
+        // Browse button click
+        browseBtn.addEventListener('click', () => {
+            mediaFilesInput.click();
+        });
+
+        // Drag and drop functionality
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            mediaUploadArea.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            mediaUploadArea.addEventListener(eventName, highlight, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            mediaUploadArea.addEventListener(eventName, unhighlight, false);
+        });
+
+        function highlight(e) {
+            mediaUploadArea.classList.add('border-primary', 'bg-light');
+        }
+
+        function unhighlight(e) {
+            mediaUploadArea.classList.remove('border-primary', 'bg-light');
+        }
+
+        mediaUploadArea.addEventListener('drop', handleDrop, false);
+
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            handleFiles(files);
+        }
+
+        // File input change
+        mediaFilesInput.addEventListener('change', function (e) {
+            handleFiles(e.target.files);
+        });
+
+        function handleFiles(files) {
+            selectedFiles = Array.from(files);
+            updatePreviews();
+        }
+
+        function updatePreviews() {
+            // Reset previews
+            imagePreview.classList.add('d-none');
+            videoPreview.classList.add('d-none');
+            additionalMediaPreview.innerHTML = '';
+
+            if (selectedFiles.length === 0) return;
+
+            // First file becomes main media
+            const mainFile = selectedFiles[0];
+            if (mainFile.type.startsWith('image/')) {
+                displayImagePreview(mainFile, imagePreview, 'image-preview-img');
+            } else if (mainFile.type.startsWith('video/')) {
+                displayVideoPreview(mainFile, videoPreview, 'video-preview-video');
+            }
+
+            // Additional files
+            if (selectedFiles.length > 1) {
+                const additionalFiles = selectedFiles.slice(1);
+                displayAdditionalMedia(additionalFiles);
+            }
+        }
+
+        function displayImagePreview(file, container, imgId) {
+            container.classList.remove('d-none');
+            const img = document.getElementById(imgId);
+            img.src = URL.createObjectURL(file);
+        }
+
+        function displayVideoPreview(file, container, videoId) {
+            container.classList.remove('d-none');
+            const video = document.getElementById(videoId);
+            video.src = URL.createObjectURL(file);
+        }
+
+        function displayAdditionalMedia(files) {
+            additionalMediaPreview.innerHTML = '<h6>Additional Media:</h6><div class="row g-2" id="additional-media-grid"></div>';
+            const grid = document.getElementById('additional-media-grid');
+
+            files.forEach((file, index) => {
+                const col = document.createElement('div');
+                col.className = 'col-md-6';
+
+                if (file.type.startsWith('image/')) {
+                    col.innerHTML = `
+                    <img src="${URL.createObjectURL(file)}" class="img-fluid rounded" alt="Additional image">
+                    <button type="button" class="btn btn-sm btn-outline-danger mt-1 remove-media" data-index="${index + 1}">
+                        <i class="fas fa-times"></i> Remove
+                    </button>
+                `;
+                } else if (file.type.startsWith('video/')) {
+                    col.innerHTML = `
+                    <video controls class="w-100 rounded">
+                        <source src="${URL.createObjectURL(file)}" type="${file.type}">
+                    </video>
+                    <button type="button" class="btn btn-sm btn-outline-danger mt-1 remove-media" data-index="${index + 1}">
+                        <i class="fas fa-times"></i> Remove
+                    </button>
+                `;
+                }
+
+                grid.appendChild(col);
+            });
+
+            // Add remove functionality
+            document.querySelectorAll('.remove-media').forEach(btn => {
+                btn.addEventListener('click', function () {
+                    const index = parseInt(this.dataset.index);
+                    selectedFiles.splice(index, 1);
+                    updatePreviews();
+                });
+            });
+        }
+
+        // Form submission
+        const form = document.getElementById('post-form');
+        const submitBtn = document.getElementById('submit-btn');
+
+        form.addEventListener('submit', function (e) {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Posting...';
+        });
+
+        // Hashtag input enhancement
+        const hashtagInput = document.querySelector('input[name="hashtags"]');
+        hashtagInput.addEventListener('input', function () {
+            // Auto-add # prefix if not present
+            const value = this.value;
+            const hashtags = value.split(',').map(tag => {
+                tag = tag.trim();
+                return tag.startsWith('#') ? tag : '#' + tag;
+            });
+            this.value = hashtags.join(', ');
+        });
+    });
+</script>
+
+<style>
+    .media-upload-area {
+        transition: all 0.3s ease;
+    }
+
+    .media-upload-area:hover {
+        border-color: #0d6efd !important;
+        background-color: #f8f9fa !important;
+    }
+
+    #additional-media-preview img,
+    #additional-media-preview video {
+        max-height: 150px;
+        object-fit: cover;
+    }
+
+    .remove-media {
+        font-size: 0.75rem;
+    }
+
+    @media (max-width: 768px) {
+        .container {
+            padding: 0 15px;
+        }
+
+        #image-preview img,
+        #video-preview video {
+            max-height: 200px;
+        }
+    }
+</style>
+{% endblock %}

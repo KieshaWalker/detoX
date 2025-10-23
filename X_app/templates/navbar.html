@@ -19,6 +19,20 @@
             <a href="{% url 'invite_list' %}">My Invitations</a>
         </li>
         {% endif %}
+        {% if request.resolver_match.url_name != 'posts:post_list' %}
+        <li class="nav-item">
+            <a href="{% url 'posts:post_list' %}">
+                <i class="fas fa-stream"></i> Posts
+            </a>
+        </li>
+        {% endif %}
+        {% if request.resolver_match.url_name != 'posts:post_create' %}
+        <li class="nav-item">
+            <a href="{% url 'posts:post_create' %}">
+                <i class="fas fa-plus"></i> Create Post
+            </a>
+        </li>
+        {% endif %}
         <li>
             <form id="logout-form" method="post" action="{% url 'logout' %}">
                 {% csrf_token %}
