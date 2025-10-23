@@ -95,28 +95,7 @@ WSGI_APPLICATION = 'detoX.wsgi.application'
 DATABASE_URL = os.getenv('DATABASE_URL')
 ON_HEROKU = os.getenv('DYNO') or os.getenv('HEROKU_SLUG_COMMIT')
 
-if ON_HEROKU:
-    # On Heroku - DATABASE_URL should be provided by Heroku Postgres
-    if DATABASE_URL:
-        DATABASES = {
-            "default": dj_database_url.config(
-                default=DATABASE_URL,
-                conn_max_age=600,
-                conn_health_checks=True,
-                ssl_require=True,
-            ),
-        }
-    else:
-        # Fallback if DATABASE_URL is not set on Heroku
-        DATABASES = {
-            "default": dj_database_url.config(
-                conn_max_age=600,
-                conn_health_checks=True,
-                ssl_require=True,
-            ),
-        }
-elif DATABASE_URL:
-    # Local development with DATABASE_URL set
+if 'ON_HEROKU' in os.environ:
     DATABASES = {
         "default": dj_database_url.config(
             env='DATABASE_URL',
@@ -126,17 +105,13 @@ elif DATABASE_URL:
         ),
     }
 else:
-    # Local development fallback
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
             'NAME': 'habits',
-            'USER': 'k',
-            'PASSWORD': 'your_db_password',
-            'HOST': 'localhost',
-            'PORT': '5432',
         }
     }
+
 
 
 
