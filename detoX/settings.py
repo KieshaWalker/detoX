@@ -96,9 +96,11 @@ DATABASE_URL = os.getenv('DATABASE_URL')
 ON_HEROKU = os.getenv('DYNO') or os.getenv('HEROKU_SLUG_COMMIT')
 
 if 'ON_HEROKU' in os.environ:
+    # Use Heroku Postgres URL instead of DATABASE_URL which may be overridden
+    heroku_db_url = os.getenv('HEROKU_POSTGRESQL_ONYX_URL') or DATABASE_URL
     DATABASES = {
         "default": dj_database_url.config(
-            env='DATABASE_URL',
+            default=heroku_db_url,
             conn_max_age=600,
             conn_health_checks=True,
             ssl_require=True,
