@@ -123,4 +123,4 @@ In-App: Help section with FAQs and contact forms
 Community: Peer support through user discussions
 detoX: Where Quality Meets Community
 
-Join a social media experience designed for humans, not metrics.
+Join a social media experience designed for humans, not metrics.# Force rebuild
