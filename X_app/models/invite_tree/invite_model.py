@@ -11,7 +11,9 @@ class InviteList(models.Model):
     inviter = models.ForeignKey(User, on_delete=models.CASCADE, related_name='invite_lists')
     invite_code = models.ForeignKey(InvitationCode, on_delete=models.CASCADE, related_name='invite_lists')
     email = models.EmailField()
+    secret_message = models.CharField(max_length=200, blank=True, help_text="Secret message included with the invitation")
     invited_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"Invite by {self.inviter.username} with code {self.invite_code.code}"
+    

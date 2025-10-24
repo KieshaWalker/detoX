@@ -9,7 +9,8 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
-
+import smtplib
+  
 from pathlib import Path
 import os
 import dj_database_url
@@ -48,7 +49,11 @@ def env_int(key, default=0):
 # Mailgun settings
 MAILGUN_DOMAIN = os.getenv("MAILGUN_DOMAIN", "")
 MAILGUN_API_KEY = os.getenv("MAILGUN_API_KEY", "")
-
+MAILGUN_SMTP_PASSWORD = os.getenv("MAILGUN_SMTP_PASSWORD", "")
+MAILGUN_SMTP_SERVER = os.getenv("MAILGUN_SMTP_SERVER", "smtp.mailgun.org")
+MAILGUN_SMTP_PORT = env_int("MAILGUN_SMTP_PORT", 587)
+SENDER_DOMAIN = os.getenv("SENDER_DOMAIN", "")
+EMAIL_USE_TLS = env_bool("MAILGUN_SMTP_TLS", True)
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
@@ -220,7 +225,11 @@ if os.getenv('ON_HEROKU'):
     EMAIL_HOST_USER = f"postmaster@{MAILGUN_DOMAIN}" if MAILGUN_DOMAIN else ""
     # Use API key as SMTP password for Mailgun
     EMAIL_HOST_PASSWORD = os.getenv("MAILGUN_API_KEY", "")
-    DEFAULT_FROM_EMAIL = f"noreply@{MAILGUN_DOMAIN}" if MAILGUN_DOMAIN else "webmaster@localhost"
+    DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", f"noreply@{MAILGUN_DOMAIN}" if MAILGUN_DOMAIN else "noreply@example.com")
+    SITE_URL = os.getenv("SITE_URL", "https://your-app-name.herokuapp.com")
+else:
+    # Development email settings (optional)
+    SITE_URL = "http://localhost:8000"
 
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 

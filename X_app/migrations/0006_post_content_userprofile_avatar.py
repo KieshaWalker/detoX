@@ -10,14 +10,15 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AddField(
-            model_name='post',
-            name='content',
-            field=models.TextField(blank=True, help_text='Legacy content field'),
-        ),
-        migrations.AddField(
-            model_name='userprofile',
-            name='avatar',
-            field=models.ImageField(blank=True, help_text='Profile picture', null=True, upload_to='avatars/'),
-        ),
+        # Content and avatar fields already exist from previous migrations
+        # migrations.AddField(
+        #     model_name='post',
+        #     name='content',
+        #     field=models.TextField(blank=True, help_text='Legacy content field'),
+        # ),
+        # migrations.AddField(
+        #     model_name='userprofile',
+        #     name='avatar',
+        #     field=models.ImageField(blank=True, help_text='Profile picture', null=True, upload_to='avatars/'),
+        # ),
     ]

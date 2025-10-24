@@ -7,6 +7,7 @@ from django.contrib.auth import login
 import uuid
 from .models import InvitationCode, UserProfile, InviteList
 from .forms import RegistrationForm
+from .models.invite_tree.invite_forms import InviteForm
 
 
 # Create your views here.
@@ -19,58 +20,19 @@ def inviteView(request):
         return redirect('login')
 
     if request.method == 'POST':
-        email = request.POST.get('email')
-        secret_message = request.POST.get('secret_message')
+        form = InviteForm(request.POST, user=request.user)
+        if form.is_valid():
+            try:
+                invite = form.save()
+                messages.success(request, f'Invitation sent successfully to {invite.email}!')
+                return redirect('invite')
+            except Exception as e:
+                messages.error(request, 'Failed to send invitation. Please try again later.')
+                return redirect('invite')
+    else:
+        form = InviteForm(user=request.user)
 
-        if not email or not secret_message:
-            messages.error(request, 'Please provide both email and secret message.')
-            return redirect('invite')
-
-        # Generate unique invitation code
-        invitation_code = str(uuid.uuid4())[:8].upper()
-
-        # Save to database
-        invitation_code_obj = InvitationCode.objects.create(code=invitation_code, invited_by=request.user)
-
-        # Create invite list entry
-        InviteList.objects.create(inviter=request.user, invite_code=invitation_code_obj, email=email)
-
-        # Send email with secret message
-        try:
-            subject = 'Your detoX Invitation'
-            message = f'''
-Hello!
-
-You've been invited to join detoX by {request.user.first_name or request.user.username},
-
-They included the following message for you:
-{secret_message}
-
-Here is your invitation code: {invitation_code}
-
-Please use this code to complete your registration, you will then complete a questionnaire before gaining access to the community.
-
-Lets detoX!,
-{request.user.get_full_name() or request.user.username}
-
-
-'''
-            send_mail(
-                subject,
-                message,
-                settings.DEFAULT_FROM_EMAIL,
-                [email],
-                fail_silently=False,
-            )
-            messages.success(request, f'Invitation sent to {email} with your secret message!')
-        except Exception as e:
-            messages.error(request, 'Failed to send email. Please try again later.')
-            # Clean up the invitation code if email failed
-            InvitationCode.objects.filter(code=invitation_code).delete()
-
-        return redirect('invite')
-
-    return render(request, 'app_/invite.html')
+    return render(request, 'app_/invite.html', {'form': form})
 
 def register(request):
     if request.method == 'POST':
