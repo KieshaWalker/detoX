@@ -14,6 +14,8 @@ from pathlib import Path
 import os
 import dj_database_url
 import requests
+import sys
+import django
 # Import the Cloudinary libraries conditionally
 # ==============================
 if os.getenv('ON_HEROKU') and os.getenv('CLOUDINARY_CLOUD_NAME'):
@@ -86,6 +88,10 @@ INSTALLED_APPS = [
 # Add cloudinary apps only on Heroku when cloudinary is configured
 if os.getenv('ON_HEROKU') and os.getenv('CLOUDINARY_CLOUD_NAME'):
     INSTALLED_APPS += ['cloudinary_storage', 'cloudinary']
+
+# add mailgun
+    INSTALLED_APPS += ['django_mailgun']
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -215,15 +221,7 @@ if os.getenv('ON_HEROKU'):
     # Use API key as SMTP password for Mailgun
     EMAIL_HOST_PASSWORD = os.getenv("MAILGUN_API_KEY", "")
     DEFAULT_FROM_EMAIL = f"noreply@{MAILGUN_DOMAIN}" if MAILGUN_DOMAIN else "webmaster@localhost"
-else:
-    # Local development (Gmail, or any SMTP you configure)
-    EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-    EMAIL_HOST = os.getenv("EMAIL_HOST", "smtp.gmail.com")
-    EMAIL_PORT = env_int("EMAIL_PORT", 587)
-    EMAIL_USE_TLS = env_bool("EMAIL_USE_TLS", True)
-    EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", "")
-    EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "")
-    DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", EMAIL_HOST_USER or "webmaster@localhost")# Default primary key field type
+
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
