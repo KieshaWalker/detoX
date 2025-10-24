@@ -26,11 +26,18 @@
                     {% for invite in invites %}
                     <div class="invite-item">
                         <div class="invite-email">{{ invite.email }}</div>
+                        {% if invite.secret_message %}
+                        <div class="invite-message">Secret message: "{{ invite.secret_message }}"</div>
+                        {% endif %}
                         <div class="invite-date">Invited on: {{ invite.invited_at|date:"M d, Y" }}</div>
                         <div class="invite-code">Code: {{ invite.invite_code.code }}</div>
                         {% if invite.invite_code.used %}
                         <div class="invite-status status-registered">
+                            {% if invite.invite_code.used_by %}
                             Registered as: {{ invite.invite_code.used_by.username }}
+                            {% else %}
+                            Code used (user details not available)
+                            {% endif %}
                         </div>
                         {% else %}
                         <div class="invite-status status-pending">
