@@ -14,21 +14,18 @@ from pathlib import Path
 import os
 import dj_database_url
 
-# Load environment variables only in development
-if not os.getenv('ON_HEROKU'):
-    try:
-        from dotenv import load_dotenv
-        load_dotenv()
-    except ImportError:
-        pass  # dotenv not available, skip loading .env file
-
-# Import cloudinary for Heroku/production
+# Import the Cloudinary libraries conditionally
+# ==============================
 if os.getenv('ON_HEROKU'):
     import cloudinary
+    from cloudinary import CloudinaryImage
     import cloudinary.uploader
     import cloudinary.api
-    from cloudinary import CloudinaryImage
-    from cloudinary import CloudinaryVideo
+
+# Load environment variables only in development
+if not os.getenv('ON_HEROKU'):
+    from dotenv import load_dotenv
+    load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent

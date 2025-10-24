@@ -1,8 +1,17 @@
+import json
 from django.db import models
 from django.conf import settings
 from django.utils import timezone
 from django.core.validators import FileExtensionValidator
 import uuid
+
+# Import cloudinary conditionally
+try:
+    import cloudinary
+    from cloudinary import CloudinaryImage
+except ImportError:
+    cloudinary = None
+    CloudinaryImage = None
 
 
 class Post(models.Model):
