@@ -13,6 +13,16 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 import os
 import dj_database_url
+import requests
+
+def send_simple_message():
+    return requests.post(
+        "https://api.mailgun.net/v3/sandboxa999fa14610447bd8b1cfe800e270b15.mailgun.org/messages",
+        auth=("api", os.getenv('MAILGUN_API_KEY', 'API_KEY')),
+        data={"from": "Mailgun Sandbox <postmaster@sandboxa999fa14610447bd8b1cfe800e270b15.mailgun.org>",
+              "to": "k walker <llcwalkerk@gmail.com>",
+              "subject": "Hello k walker",
+              "text": "Congratulations k walker, you just sent an email with Mailgun! You are truly awesome!"})
 
 # Import the Cloudinary libraries conditionally
 # ==============================
