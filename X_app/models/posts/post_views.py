@@ -165,7 +165,7 @@ class PostUpdateView(LoginRequiredMixin, UpdateView):
 
     def form_valid(self, form):
         # Get old hashtags from database BEFORE any updates
-        old_post = Post.objects.get(pk=self.object.pk)
+        old_post = Post.objects.get(pk=form.instance.pk)
         old_hashtags_text = old_post.hashtags or ''
         
         # Get new hashtags from form
@@ -175,7 +175,7 @@ class PostUpdateView(LoginRequiredMixin, UpdateView):
         response = super().form_valid(form)
         
         # Handle media updates
-        self._handle_media_upload(form.instance)
+        self._handle_media_upload(self.object)
         
         # Now handle hashtag updates
         old_hashtags = set()
