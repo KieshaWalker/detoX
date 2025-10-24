@@ -24,7 +24,7 @@ def test_email_config():
     print("=" * 40)
 
     # Debug environment detection
-    on_heroku = os.getenv('ON_HEROKU') == 'True'
+    on_heroku = bool(os.getenv('ON_HEROKU'))
     print(f"🌐 Environment: {'Heroku Production' if on_heroku else 'Local Development'}")
     print(f"📊 ON_HEROKU: {os.getenv('ON_HEROKU')}")
     print(f"🏭 DYNO: {os.getenv('DYNO')}")

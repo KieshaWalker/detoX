@@ -16,11 +16,14 @@ import dj_database_url
 
 # Load environment variables only in development
 if not os.getenv('ON_HEROKU'):
-    from dotenv import load_dotenv
-    load_dotenv()
+    try:
+        from dotenv import load_dotenv
+        load_dotenv()
+    except ImportError:
+        pass  # dotenv not available, skip loading .env file
 
 # Import cloudinary for Heroku/production
-if os.getenv('ON_HEROKU') == 'True':
+if os.getenv('ON_HEROKU'):
     import cloudinary
     import cloudinary.uploader
     import cloudinary.api
@@ -82,7 +85,7 @@ INSTALLED_APPS = [
 ]
 
 # Add cloudinary apps only on Heroku
-if os.getenv('ON_HEROKU') == 'True':
+if os.getenv('ON_HEROKU'):
     INSTALLED_APPS += ['cloudinary_storage', 'cloudinary']
 
 MIDDLEWARE = [
@@ -178,7 +181,7 @@ STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Media files (User uploaded files)
-if os.getenv('ON_HEROKU') == 'True':
+if os.getenv('ON_HEROKU'):
     # Use Cloudinary for media storage on Heroku
     CLOUDINARY_STORAGE = {
         'CLOUD_NAME': os.getenv('CLOUDINARY_CLOUD_NAME'),
@@ -201,7 +204,7 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_COOKIE_AGE = 86400  # 24 hours for development
 
 # Email settings
-if os.getenv('ON_HEROKU') == 'True':
+if os.getenv('ON_HEROKU'):
     # Use Mailgun SMTP on Heroku
     EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
     EMAIL_HOST = os.getenv("MAILGUN_SMTP_SERVER", "smtp.mailgun.org")
