@@ -74,12 +74,12 @@
                         <!-- Main Media -->
                         {% if post.image %}
                         <div class="post-media mb-3">
-                            <img src="{{ post.image.url }}" class="img-fluid rounded" alt="Post image">
+                            <img src="{{ post.get_image_url }}" class="img-fluid rounded" alt="Post image">
                         </div>
                         {% elif post.video %}
                         <div class="post-media mb-3">
                             <video class="w-100 rounded" controls>
-                                <source src="{{ post.video.url }}" type="video/mp4">
+                                <source src="{{ post.get_video_url }}" type="video/mp4">
                                 Your browser does not support the video tag.
                             </video>
                         </div>
@@ -92,10 +92,10 @@
                                 {% for media in post.post_media.all %}
                                 <div class="col-md-6">
                                     {% if media.media_type == 'image' %}
-                                    <img src="{{ media.file.url }}" class="img-fluid rounded" alt="Media">
+                                    <img src="{{ media.get_media_url }}" class="img-fluid rounded" alt="Media">
                                     {% elif media.media_type == 'video' %}
                                     <video class="w-100 rounded" controls>
-                                        <source src="{{ media.file.url }}" type="video/mp4">
+                                        <source src="{{ media.get_media_url }}" type="video/mp4">
                                     </video>
                                     {% endif %}
                                 </div>

@@ -159,6 +159,52 @@ class Post(models.Model):
             return []
         return [tag.strip('#').strip() for tag in self.hashtags.split(',') if tag.strip()]
 
+    def get_image_url(self):
+        """Get optimized Cloudinary URL for image, fallback to standard URL"""
+        if not self.image:
+            return None
+
+        # If Cloudinary is available, use it for optimization
+        if cloudinary and hasattr(self.image, 'url'):
+            try:
+                # For Cloudinary images, we can optimize the URL
+                if hasattr(self.image, 'build_url'):
+                    return self.image.build_url(width=800, height=800, crop="limit", quality="auto")
+                else:
+                    return self.image.url
+            except:
+                return self.image.url
+        else:
+            # Fallback to standard Django media URL
+            return self.image.url
+
+    def get_video_url(self):
+        """Get Cloudinary URL for video, fallback to standard URL"""
+        if not self.video:
+            return None
+
+        # If Cloudinary is available, use it
+        if cloudinary and hasattr(self.video, 'url'):
+            try:
+                # For Cloudinary videos, we can optimize the URL
+                if hasattr(self.video, 'build_url'):
+                    return self.video.build_url(quality="auto")
+                else:
+                    return self.video.url
+            except:
+                return self.video.url
+        else:
+            # Fallback to standard Django media URL
+            return self.video.url
+
+    def get_media_url(self):
+        """Get the appropriate media URL based on media type"""
+        if self.is_video_post:
+            return self.get_video_url()
+        elif self.is_image_post:
+            return self.get_image_url()
+        return None
+
 
 class PostMedia(models.Model):
     """
@@ -189,6 +235,30 @@ class PostMedia(models.Model):
     class Meta:
         ordering = ['order']
         unique_together = ['post', 'order']
+
+    def get_media_url(self):
+        """Get optimized Cloudinary URL for media file, fallback to standard URL"""
+        if not self.media_file:
+            return None
+
+        # If Cloudinary is available, use it for optimization
+        if cloudinary and hasattr(self.media_file, 'url'):
+            try:
+                # For Cloudinary files, we can optimize based on media type
+                if hasattr(self.media_file, 'build_url'):
+                    if self.media_type == 'image':
+                        return self.media_file.build_url(width=400, height=400, crop="limit", quality="auto")
+                    elif self.media_type == 'video':
+                        return self.media_file.build_url(quality="auto")
+                    else:
+                        return self.media_file.url
+                else:
+                    return self.media_file.url
+            except:
+                return self.media_file.url
+        else:
+            # Fallback to standard Django media URL
+            return self.media_file.url
 
 
 class Like(models.Model):
