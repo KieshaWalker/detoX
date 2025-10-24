@@ -1,5 +1,7 @@
 asgiref==3.10.0
+cloudinary==1.44.1
 dj-database-url==3.0.1
+django-cloudinary-storage==0.3.3
 Django==5.2.7
 django-mailgun==0.9.1
 gunicorn==23.0.0

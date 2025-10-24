@@ -19,6 +19,12 @@ if not os.getenv('ON_HEROKU'):
     from dotenv import load_dotenv
     load_dotenv()
 
+# Import cloudinary for Heroku/production
+if os.getenv('ON_HEROKU') == 'True':
+    import cloudinary
+    import cloudinary.uploader
+    import cloudinary.api
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -74,6 +80,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 ]
+
+# Add cloudinary apps only on Heroku
+if os.getenv('ON_HEROKU') == 'True':
+    INSTALLED_APPS += ['cloudinary_storage', 'cloudinary']
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -168,8 +178,23 @@ STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Media files (User uploaded files)
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+if os.getenv('ON_HEROKU') == 'True':
+    # Use Cloudinary for media storage on Heroku
+    CLOUDINARY_STORAGE = {
+        'CLOUD_NAME': os.getenv('CLOUDINARY_CLOUD_NAME'),
+        'API_KEY': os.getenv('CLOUDINARY_API_KEY'),
+        'API_SECRET': os.getenv('CLOUDINARY_API_SECRET'),
+    }
+
+    cloudinary.config(**CLOUDINARY_STORAGE)
+
+    # Use Cloudinary for media files
+    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+    CLOUDINARY_URL = os.getenv('CLOUDINARY_URL')
+else:
+    # Local development - use local storage
+    MEDIA_URL = '/media/'
+    MEDIA_ROOT = BASE_DIR / 'media'
 
 # Session settings
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
