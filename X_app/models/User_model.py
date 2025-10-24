@@ -12,6 +12,14 @@ class UserProfile(models.Model):
     first_name = models.CharField(max_length=200, blank=True)
     last_name = models.CharField(max_length=200, blank=True)
     email = models.EmailField(blank=True)
+    
+    # Profile picture/avatar
+    avatar = models.ImageField(
+        upload_to='avatars/',
+        blank=True,
+        null=True,
+        help_text="Profile picture"
+    )
 
     
     def __str__(self):

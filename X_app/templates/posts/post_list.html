@@ -18,8 +18,12 @@
             {% for post in posts %}
             <div class="card mb-4 post-card" data-post-id="{{ post.id }}">
                 <div class="card-header d-flex align-items-center">
-                    <img src="{% if post.author.userprofile.avatar %}{{ post.author.userprofile.avatar.url }}{% else %}{% static 'images/default-avatar.png' %}{% endif %}"
-                        class="rounded-circle me-3" width="40" height="40" alt="Avatar">
+                    {% if post.author.userprofile and post.author.userprofile.avatar %}
+                    <img src="{{ post.author.userprofile.avatar.url }}" class="rounded-circle me-3" width="40"
+                        height="40" alt="Avatar">
+                    {% else %}
+                    <i class="fas fa-user-circle fa-2x text-secondary me-3"></i>
+                    {% endif %}
                     <div>
                         <h6 class="mb-0">
                             <a href="{% url 'posts:user_posts' post.author.username %}" class="text-decoration-none">

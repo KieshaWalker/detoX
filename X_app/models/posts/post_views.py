@@ -36,11 +36,9 @@ class PostListView(LoginRequiredMixin, ListView):
         else:
             queryset = Post.objects.filter(privacy='public')
 
-        queryset = queryset.select_related('author').prefetch_related(
-            'post_media',
-            'likes',
-            'comments__author',
-            Prefetch('hashtags', queryset=Hashtag.objects.all())
+        queryset = queryset.select_related('author', 'author__userprofile').prefetch_related(
+            'additional_media',
+            'likes'
         ).annotate(
             like_count=Count('likes'),
             comment_count=Count('comments')
@@ -93,7 +91,7 @@ class PostCreateView(LoginRequiredMixin, CreateView):
     """Create a new post with media upload"""
     model = Post
     template_name = 'posts/post_form.html'
-    fields = ['caption', 'content', 'privacy', 'location', 'hashtags']
+    fields = ['caption', 'privacy', 'location', 'hashtags']
     success_url = reverse_lazy('posts:post_list')
 
     def form_valid(self, form):

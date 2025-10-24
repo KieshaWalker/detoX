@@ -10,9 +10,10 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AddField(
-            model_name='post',
-            name='content',
-            field=models.TextField(blank=True, help_text='Legacy content field'),
-        ),
+        # Content field already added manually - marking as no-op
+        # migrations.AddField(
+        #     model_name='post',
+        #     name='content',
+        #     field=models.TextField(blank=True, help_text='Legacy content field'),
+        # ),
     ]
