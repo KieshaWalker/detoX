@@ -109,12 +109,8 @@
     color: var(--primary-dark);
 }
 
-.terms-section, .terms-agreement {
-    background: linear-gradient(135deg, linear-gradient(135deg, rgb(38, 72, 50, 0.1), rgba(12, 74, 34, 0.273)));
-    border: 2px solid rgb(35, 34, 32);
-}
 
-.waiver-section {
+.waiver-section, .terms-agreement, .terms-section {
     background: linear-gradient(135deg, rgba(19, 29, 23, 0.339), rgba(12, 18, 14, 0.117)) !important;
     border: 2px solid rgb(16, 24, 19) !important;
 }

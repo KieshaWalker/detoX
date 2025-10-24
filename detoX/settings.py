@@ -16,7 +16,7 @@ import dj_database_url
 
 # Import the Cloudinary libraries conditionally
 # ==============================
-if os.getenv('ON_HEROKU'):
+if os.getenv('ON_HEROKU') and os.getenv('CLOUDINARY_CLOUD_NAME'):
     import cloudinary
     from cloudinary import CloudinaryImage
     import cloudinary.uploader
@@ -83,8 +83,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 ]
 
-# Add cloudinary apps only on Heroku
-if os.getenv('ON_HEROKU'):
+# Add cloudinary apps only on Heroku when cloudinary is configured
+if os.getenv('ON_HEROKU') and os.getenv('CLOUDINARY_CLOUD_NAME'):
     INSTALLED_APPS += ['cloudinary_storage', 'cloudinary']
 
 MIDDLEWARE = [
@@ -180,7 +180,7 @@ STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Media files (User uploaded files)
-if os.getenv('ON_HEROKU'):
+if os.getenv('ON_HEROKU') and os.getenv('CLOUDINARY_CLOUD_NAME'):
     # Use Cloudinary for media storage on Heroku
     CLOUDINARY_STORAGE = {
         'CLOUD_NAME': os.getenv('CLOUDINARY_CLOUD_NAME'),
