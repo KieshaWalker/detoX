@@ -14,16 +14,6 @@ from pathlib import Path
 import os
 import dj_database_url
 import requests
-
-def send_simple_message():
-    return requests.post(
-        "https://api.mailgun.net/v3/sandboxa999fa14610447bd8b1cfe800e270b15.mailgun.org/messages",
-        auth=("api", os.getenv('MAILGUN_API_KEY', 'API_KEY')),
-        data={"from": "Mailgun Sandbox <postmaster@sandboxa999fa14610447bd8b1cfe800e270b15.mailgun.org>",
-              "to": "k walker <llcwalkerk@gmail.com>",
-              "subject": "Hello k walker",
-              "text": "Congratulations k walker, you just sent an email with Mailgun! You are truly awesome!"})
-
 # Import the Cloudinary libraries conditionally
 # ==============================
 if os.getenv('ON_HEROKU') and os.getenv('CLOUDINARY_CLOUD_NAME'):
@@ -222,7 +212,8 @@ if os.getenv('ON_HEROKU'):
     EMAIL_USE_TLS = env_bool("MAILGUN_SMTP_TLS", True)
     # For Mailgun, SMTP username is postmaster@domain
     EMAIL_HOST_USER = f"postmaster@{MAILGUN_DOMAIN}" if MAILGUN_DOMAIN else ""
-    EMAIL_HOST_PASSWORD = os.getenv("MAILGUN_SMTP_PASSWORD", "")
+    # Use API key as SMTP password for Mailgun
+    EMAIL_HOST_PASSWORD = os.getenv("MAILGUN_API_KEY", "")
     DEFAULT_FROM_EMAIL = f"noreply@{MAILGUN_DOMAIN}" if MAILGUN_DOMAIN else "webmaster@localhost"
 else:
     # Local development (Gmail, or any SMTP you configure)
