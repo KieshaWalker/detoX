@@ -17,4 +17,10 @@ urlpatterns = [
 
     # Posts URLs
     path('posts/', include('X_app.models.posts.urls')),
+    path('posts/<int:pk>/', include('X_app.models.posts.urls')),
+    path('posts/<int:pk>/edit/', include('X_app.models.posts.urls')),
+    path('posts/<int:pk>/delete/', include('X_app.models.posts.urls')),
+    path('posts/<int:pk>/like/', include('X_app.models.posts.urls')),
+    path('posts/<int:pk>/comment/', include('X_app.models.posts.urls')),
+    
 ]

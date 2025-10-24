@@ -93,6 +93,7 @@ class PostCreateView(LoginRequiredMixin, CreateView):
     template_name = 'posts/post_form.html'
     fields = ['caption', 'privacy', 'location', 'hashtags']
     success_url = reverse_lazy('posts:post_list')
+    isArchive = False
 
     def form_valid(self, form):
         form.instance.author = self.request.user
@@ -157,6 +158,7 @@ class PostUpdateView(LoginRequiredMixin, UpdateView):
     model = Post
     template_name = 'posts/post_form.html'
     fields = ['caption', 'privacy', 'location', 'hashtags']
+    externaml_fields = ['like_count', 'comment_count', 'views_count']
 
     def get_queryset(self):
         return Post.objects.filter(author=self.request.user)
