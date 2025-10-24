@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Create Post{% endblock %}
+{% block title %}{% if object %}Edit Post{% else %}Create New Post{% endif %}{% endblock %}
 
 {% block content %}
 <div class="container">
@@ -9,7 +9,7 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="mb-0">Create New Post</h3>
+                    <h3 class="mb-0">{% if object %}Edit Post{% else %}Create New Post{% endif %}</h3>
                 </div>
                 <div class="card-body">
                     <form method="post" enctype="multipart/form-data" id="post-form">
@@ -22,13 +22,46 @@
                             <div class="form-text">Share what's on your mind...</div>
                         </div>
 
+                        <!-- Current Media Display (for editing) -->
+                        {% if object %}
+                        <div class="mb-3" id="current-media-section">
+                            <label class="form-label">Current Media</label>
+                            {% if object.image %}
+                            <div class="current-media-preview mb-3 p-3 border rounded">
+                                <h6 class="mb-2">Current Image:</h6>
+                                <img src="{{ object.image.url }}" class="img-fluid rounded" style="max-height: 300px;"
+                                    alt="Current post image">
+                                <div class="mt-2">
+                                    <small class="text-muted">Leave media fields empty to keep current image</small>
+                                </div>
+                            </div>
+                            {% elif object.video %}
+                            <div class="current-media-preview mb-3 p-3 border rounded">
+                                <h6 class="mb-2">Current Video:</h6>
+                                <video class="w-100 rounded" controls style="max-height: 300px;">
+                                    <source src="{{ object.video.url }}" type="video/mp4">
+                                    Your browser does not support the video tag.
+                                </video>
+                                <div class="mt-2">
+                                    <small class="text-muted">Leave media fields empty to keep current video</small>
+                                </div>
+                            </div>
+                            {% else %}
+                            <div class="current-media-preview mb-3 p-3 border rounded bg-light">
+                                <p class="mb-0 text-muted">No media currently attached to this post</p>
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+
                         <!-- Media Upload -->
                         <div class="mb-3">
-                            <label class="form-label">Media</label>
+                            <label class="form-label">{% if object %}Replace Media{% else %}Add Media{% endif %}</label>
                             <div class="media-upload-area border border-2 border-dashed rounded p-4 text-center mb-3"
                                 id="media-upload-area">
                                 <i class="fas fa-cloud-upload-alt fa-2x text-muted mb-2"></i>
-                                <p class="mb-2">Drag & drop images or videos here, or click to browse</p>
+                                <p class="mb-2">{% if object %}Upload new media to replace current{% else %}Drag & drop
+                                    images or videos here, or click to browse{% endif %}</p>
                                 <input type="file" id="media-files" name="media_files[]" value="" multiple
                                     accept="image/*,video/*" style="display: none;">
                                 <button type="button" class="btn btn-outline-primary" id="browse-btn">Browse
@@ -37,14 +70,14 @@
 
                             <!-- Main Image Preview -->
                             <div id="image-preview" class="d-none">
-                                <h6>Main Image:</h6>
+                                <h6>New Image:</h6>
                                 <img id="image-preview-img" class="img-fluid rounded mb-2" style="max-height: 300px;">
                                 <input type="file" name="image" accept="image/*" class="form-control">
                             </div>
 
                             <!-- Main Video Preview -->
                             <div id="video-preview" class="d-none">
-                                <h6>Main Video:</h6>
+                                <h6>New Video:</h6>
                                 <video id="video-preview-video" controls class="w-100 rounded mb-2"
                                     style="max-height: 300px;"></video>
                                 <input type="file" name="video" accept="video/*" class="form-control">
@@ -77,9 +110,10 @@
 
                         <!-- Submit Buttons -->
                         <div class="d-flex justify-content-between">
-                            <a href="{% url 'posts:post_list' %}" class="btn btn-outline-secondary">Cancel</a>
+                            <a href="{% if object %}{% url 'posts:post_detail' object.pk %}{% else %}{% url 'posts:post_list' %}{% endif %}"
+                                class="btn btn-outline-secondary">Cancel</a>
                             <button type="submit" class="btn btn-primary" id="submit-btn">
-                                <i class="fas fa-paper-plane"></i> Post
+                                <i class="fas fa-paper-plane"></i> {% if object %}Update Post{% else %}Create Post{% endif %}
                             </button>
                         </div>
                     </form>

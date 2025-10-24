@@ -60,7 +60,7 @@ class PostDetailView(LoginRequiredMixin, DetailView):
 
     def get_queryset(self):
         return Post.objects.select_related('author').prefetch_related(
-            'post_media',
+            'additional_media',
             'likes',
             'comments__author',
             'hashtags'
@@ -105,7 +105,7 @@ class PostCreateView(LoginRequiredMixin, CreateView):
         hashtags_text = form.cleaned_data.get('hashtags', '')
         if hashtags_text:
             # Process hashtags and create/update Hashtag objects
-            hashtag_names = [tag.strip('#').lower() for tag in hashtags_text.split(',') if tag.strip()]
+            hashtag_names = [tag.strip().strip('#').lower() for tag in hashtags_text.split(',') if tag.strip()]
             for name in hashtag_names:
                 hashtag, created = Hashtag.objects.get_or_create(
                     name=name,
@@ -164,15 +164,27 @@ class PostUpdateView(LoginRequiredMixin, UpdateView):
         return Post.objects.filter(author=self.request.user)
 
     def form_valid(self, form):
-        # Handle hashtag updates
-        old_hashtags = set()
-        if self.object.hashtags:
-            old_hashtags = set(tag.strip('#').lower() for tag in self.object.hashtags.split(',') if tag.strip())
-
+        # Get old hashtags from database BEFORE any updates
+        old_post = Post.objects.get(pk=self.object.pk)
+        old_hashtags_text = old_post.hashtags or ''
+        
+        # Get new hashtags from form
         new_hashtags_text = form.cleaned_data.get('hashtags', '')
+        
+        # Call parent form_valid to save the object
+        response = super().form_valid(form)
+        
+        # Handle media updates
+        self._handle_media_upload(form.instance)
+        
+        # Now handle hashtag updates
+        old_hashtags = set()
+        if old_hashtags_text:
+            old_hashtags = set(tag.strip().strip('#').lower() for tag in old_hashtags_text.split(',') if tag.strip())
+
         new_hashtags = set()
         if new_hashtags_text:
-            new_hashtags = set(tag.strip('#').lower() for tag in new_hashtags_text.split(',') if tag.strip())
+            new_hashtags = set(tag.strip().strip('#').lower() for tag in new_hashtags_text.split(',') if tag.strip())
 
         # Update hashtag counts
         for old_tag in old_hashtags - new_hashtags:
@@ -191,12 +203,40 @@ class PostUpdateView(LoginRequiredMixin, UpdateView):
             hashtag.posts_count += 1
             hashtag.save()
 
-        response = super().form_valid(form)
         messages.success(self.request, 'Post updated successfully!')
         return response
 
     def get_success_url(self):
         return reverse('posts:post_detail', kwargs={'pk': self.object.pk})
+
+    def _handle_media_upload(self, post):
+        """Handle media file uploads for the post"""
+        # Handle main image
+        if 'image' in self.request.FILES:
+            post.image = self.request.FILES['image']
+            post.save()
+
+        # Handle main video
+        if 'video' in self.request.FILES:
+            post.video = self.request.FILES['video']
+            post.save()
+
+        # Handle additional media files
+        media_files = self.request.FILES.getlist('media_files[]')
+        for media_file in media_files:
+            PostMedia.objects.create(
+                post=post,
+                media_file=media_file,
+                media_type=self._get_media_type(media_file)
+            )
+
+    def _get_media_type(self, file):
+        """Determine media type based on file extension"""
+        if file.name.lower().endswith(('.jpg', '.jpeg', '.png', '.gif', '.webp')):
+            return 'image'
+        elif file.name.lower().endswith(('.mp4', '.mov', '.avi', '.webm')):
+            return 'video'
+        return 'other'
 
 
 class PostDeleteView(LoginRequiredMixin, DeleteView):
@@ -213,7 +253,7 @@ class PostDeleteView(LoginRequiredMixin, DeleteView):
 
         # Update hashtag counts
         if post.hashtags:
-            hashtag_names = [tag.strip('#').lower() for tag in post.hashtags.split(',') if tag.strip()]
+            hashtag_names = [tag.strip().strip('#').lower() for tag in post.hashtags.split(',') if tag.strip()]
             for name in hashtag_names:
                 try:
                     hashtag = Hashtag.objects.get(name=name)
