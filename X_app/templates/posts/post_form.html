@@ -173,13 +173,76 @@
             handleFiles(files);
         }
 
-        // File input change
+        // File input change for additional media
         mediaFilesInput.addEventListener('change', function (e) {
             handleFiles(e.target.files);
         });
 
+        // File input change for main image
+        const mainImageInput = document.querySelector('input[name="image"]');
+        if (mainImageInput) {
+            mainImageInput.addEventListener('change', function (e) {
+                if (e.target.files.length > 0) {
+                    const file = e.target.files[0];
+                    selectedFiles = [file]; // Set as main file
+                    updatePreviews();
+                }
+            });
+        }
+
+        // File input change for main video
+        const mainVideoInput = document.querySelector('input[name="video"]');
+        if (mainVideoInput) {
+            mainVideoInput.addEventListener('change', function (e) {
+                if (e.target.files.length > 0) {
+                    const file = e.target.files[0];
+                    selectedFiles = [file]; // Set as main file
+                    updatePreviews();
+                }
+            });
+        }
+
         function handleFiles(files) {
             selectedFiles = Array.from(files);
+
+            // If we have files, populate the main image/video inputs
+            if (selectedFiles.length > 0) {
+                const mainFile = selectedFiles[0];
+                if (mainFile.type.startsWith('image/')) {
+                    // Set the file on the image input
+                    const imageInput = document.querySelector('input[name="image"]');
+                    if (imageInput) {
+                        // Use DataTransfer for modern browsers
+                        if (window.DataTransfer) {
+                            const dt = new DataTransfer();
+                            dt.items.add(mainFile);
+                            imageInput.files = dt.files;
+                        } else {
+                            // Fallback for older browsers
+                            imageInput.files = [mainFile];
+                        }
+                        // Trigger change event to show preview
+                        imageInput.dispatchEvent(new Event('change'));
+                    }
+                } else if (mainFile.type.startsWith('video/')) {
+                    // Set the file on the video input
+                    const videoInput = document.querySelector('input[name="video"]');
+                    if (videoInput) {
+                        // Use DataTransfer for modern browsers
+                        if (window.DataTransfer) {
+                            const dt = new DataTransfer();
+                            dt.items.add(mainFile);
+                            videoInput.files = dt.files;
+                        } else {
+                            // Fallback for older browsers
+                            videoInput.files = [mainFile];
+                        }
+                        // Trigger change event to show preview
+                        videoInput.dispatchEvent(new Event('change'));
+                    }
+                }
+            }
+
             updatePreviews();
         }
 

@@ -79,14 +79,12 @@
                     <!-- Hashtags -->
                     {% if post.hashtags %}
                     <div class="hashtags mb-4">
-                        {% for hashtag in post.hashtags.split ',' %}
                         {% if hashtag %}
                         <a href="{% url 'posts:hashtag_posts' hashtag|slice:'1:' %}"
                             class="badge bg-primary text-decoration-none me-2 mb-2">
                             #{{ hashtag|slice:'1:' }}
                         </a>
                         {% endif %}
-                        {% endfor %}
                     </div>
                     {% endif %}
 

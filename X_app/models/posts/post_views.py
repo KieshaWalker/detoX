@@ -49,6 +49,10 @@ class PostListView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['page_title'] = 'Post Feed'
+        
+        # Get popular hashtags for sidebar (using existing posts_count field)
+        context['popular_hashtags'] = Hashtag.objects.order_by('-posts_count')[:10]
+        
         return context
 
 
@@ -62,8 +66,7 @@ class PostDetailView(LoginRequiredMixin, DetailView):
         return Post.objects.select_related('author').prefetch_related(
             'additional_media',
             'likes',
-            'comments__author',
-            'hashtags'
+            'comments__author'
         )
 
     def get_context_data(self, **kwargs):
