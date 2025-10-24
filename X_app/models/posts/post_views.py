@@ -17,6 +17,7 @@ import json
 import uuid
 
 from .post_model import Post, PostMedia, Like, Comment, Hashtag, PostView
+from ...forms import PostForm
 
 
 class PostListView(LoginRequiredMixin, ListView):
@@ -93,16 +94,12 @@ class PostDetailView(LoginRequiredMixin, DetailView):
 class PostCreateView(LoginRequiredMixin, CreateView):
     """Create a new post with media upload"""
     model = Post
+    form_class = PostForm
     template_name = 'posts/post_form.html'
-    fields = ['caption', 'privacy', 'location', 'hashtags']
     success_url = reverse_lazy('posts:post_list')
-    isArchive = False
 
     def form_valid(self, form):
         form.instance.author = self.request.user
-        
-        # Set content field to match caption (for database compatibility)
-        form.instance.content = form.cleaned_data.get('caption', '')
 
         # Handle hashtags
         hashtags_text = form.cleaned_data.get('hashtags', '')
@@ -120,32 +117,18 @@ class PostCreateView(LoginRequiredMixin, CreateView):
 
         response = super().form_valid(form)
 
-        # Handle file uploads
+        # Handle file uploads (now simplified since form handles additional media)
         self._handle_media_upload(form.instance)
 
         messages.success(self.request, 'Post created successfully!')
         return response
 
     def _handle_media_upload(self, post):
-        """Handle media file uploads for the post"""
-        # Handle main image
-        if 'image' in self.request.FILES:
-            post.image = self.request.FILES['image']
-            post.save()
-
-        # Handle main video
-        if 'video' in self.request.FILES:
-            post.video = self.request.FILES['video']
-            post.save()
-
-        # Handle additional media files
-        media_files = self.request.FILES.getlist('media_files[]')
-        for media_file in media_files:
-            PostMedia.objects.create(
-                post=post,
-                media_file=media_file,
-                media_type=self._get_media_type(media_file)
-            )
+        """Handle main media file uploads for the post"""
+        # Main image and video are now handled by the form's save method
+        # Additional media is handled by the form's additional_media field
+        # This method is kept for any additional processing if needed
+        pass
 
     def _get_media_type(self, file):
         """Determine media type based on file extension"""
@@ -159,9 +142,8 @@ class PostCreateView(LoginRequiredMixin, CreateView):
 class PostUpdateView(LoginRequiredMixin, UpdateView):
     """Update an existing post"""
     model = Post
+    form_class = PostForm
     template_name = 'posts/post_form.html'
-    fields = ['caption', 'privacy', 'location', 'hashtags']
-    externaml_fields = ['like_count', 'comment_count', 'views_count']
 
     def get_queryset(self):
         return Post.objects.filter(author=self.request.user)
@@ -170,16 +152,26 @@ class PostUpdateView(LoginRequiredMixin, UpdateView):
         # Get old hashtags from database BEFORE any updates
         old_post = Post.objects.get(pk=form.instance.pk)
         old_hashtags_text = old_post.hashtags or ''
-        
+
         # Get new hashtags from form
         new_hashtags_text = form.cleaned_data.get('hashtags', '')
-        
+
+        # Handle media replacement - clear old media if new media is uploaded
+        if 'image' in self.request.FILES or 'video' in self.request.FILES:
+            # Clear existing media
+            if old_post.image:
+                old_post.image.delete()
+                old_post.image = None
+            if old_post.video:
+                old_post.video.delete()
+                old_post.video = None
+
         # Call parent form_valid to save the object
         response = super().form_valid(form)
-        
-        # Handle media updates
-        self._handle_media_upload(self.object)
-        
+
+        # Handle additional media updates
+        self._handle_additional_media_update(self.object)
+
         # Now handle hashtag updates
         old_hashtags = set()
         if old_hashtags_text:
@@ -212,26 +204,20 @@ class PostUpdateView(LoginRequiredMixin, UpdateView):
     def get_success_url(self):
         return reverse('posts:post_detail', kwargs={'pk': self.object.pk})
 
-    def _handle_media_upload(self, post):
-        """Handle media file uploads for the post"""
-        # Handle main image
-        if 'image' in self.request.FILES:
-            post.image = self.request.FILES['image']
-            post.save()
+    def _handle_additional_media_update(self, post):
+        """Handle additional media updates for post editing"""
+        # Handle new additional media files
+        additional_files = self.request.FILES.getlist('additional_media')
+        for file in additional_files:
+            if file:
+                # Determine media type
+                media_type = 'image' if file.content_type.startswith('image/') else 'video'
 
-        # Handle main video
-        if 'video' in self.request.FILES:
-            post.video = self.request.FILES['video']
-            post.save()
-
-        # Handle additional media files
-        media_files = self.request.FILES.getlist('media_files[]')
-        for media_file in media_files:
-            PostMedia.objects.create(
-                post=post,
-                media_file=media_file,
-                media_type=self._get_media_type(media_file)
-            )
+                PostMedia.objects.create(
+                    post=post,
+                    media_file=file,
+                    media_type=media_type
+                )
 
     def _get_media_type(self, file):
         """Determine media type based on file extension"""

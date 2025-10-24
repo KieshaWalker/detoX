@@ -1,6 +1,12 @@
 from django import forms
 from django.contrib.auth.models import User
-from .models import QuestionnaireResponse, InvitationCode
+from .models import QuestionnaireResponse, InvitationCode, Post, PostMedia
+
+
+class MultipleFileInput(forms.ClearableFileInput):
+    """Custom widget for multiple file uploads"""
+    allow_multiple_selected = True
+
 
 class RegistrationForm(forms.ModelForm):
     username = forms.CharField(
@@ -72,3 +78,113 @@ class RegistrationForm(forms.ModelForm):
 login_form = forms.Form()
 login_form.fields['username'] = forms.CharField(max_length=150)
 login_form.fields['password'] = forms.CharField(widget=forms.PasswordInput())
+
+
+class PostForm(forms.ModelForm):
+    """Form for creating and editing posts with Cloudinary media upload support"""
+
+    # Additional media files (for carousel posts)
+    additional_media = forms.FileField(
+        required=False,
+        widget=MultipleFileInput(attrs={
+            'accept': 'image/*,video/*',
+            'class': 'form-control'
+        }),
+        help_text="Upload additional images or videos for a carousel post",
+        label="Additional Media"
+    )
+
+    class Meta:
+        model = Post
+        fields = ['caption', 'image', 'video', 'location', 'hashtags', 'privacy']
+        widgets = {
+            'caption': forms.Textarea(attrs={
+                'rows': 3,
+                'placeholder': 'Share what\'s on your mind...',
+                'class': 'form-control'
+            }),
+            'image': forms.ClearableFileInput(attrs={
+                'accept': 'image/*',
+                'class': 'form-control'
+            }),
+            'video': forms.ClearableFileInput(attrs={
+                'accept': 'video/*',
+                'class': 'form-control'
+            }),
+            'location': forms.TextInput(attrs={
+                'placeholder': 'Where was this taken?',
+                'class': 'form-control'
+            }),
+            'hashtags': forms.TextInput(attrs={
+                'placeholder': 'travel, photography, nature',
+                'class': 'form-control'
+            }),
+            'privacy': forms.Select(attrs={'class': 'form-control'}),
+        }
+        help_texts = {
+            'caption': 'Share what\'s on your mind...',
+            'image': 'Upload a main image for your post',
+            'video': 'Upload a video for your post (alternative to image)',
+            'location': 'Where was this taken?',
+            'hashtags': 'Separate multiple hashtags with commas',
+            'privacy': 'Who can see this post?',
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Make image and video optional in form validation since we handle this in view
+        self.fields['image'].required = False
+        self.fields['video'].required = False
+
+    def clean(self):
+        cleaned_data = super().clean()
+        image = cleaned_data.get('image')
+        video = cleaned_data.get('video')
+
+        # Ensure only one media type is selected
+        if image and video:
+            raise forms.ValidationError(
+                "You can only upload either an image OR a video, not both."
+            )
+
+        return cleaned_data
+
+    def clean_hashtags(self):
+        """Clean and validate hashtags"""
+        hashtags = self.cleaned_data.get('hashtags', '')
+        if hashtags:
+            # Process hashtags: remove extra spaces, ensure # prefix
+            hashtag_list = []
+            for tag in hashtags.split(','):
+                tag = tag.strip()
+                if tag:
+                    # Remove # if present and add it back
+                    tag = tag.lstrip('#')
+                    if tag:  # Only add non-empty tags
+                        hashtag_list.append(f"#{tag}")
+            return ', '.join(hashtag_list)
+        return hashtags
+
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+
+        # Set content field to match caption for backward compatibility
+        instance.content = instance.caption or ''
+
+        if commit:
+            instance.save()
+
+        # Handle additional media files
+        additional_files = self.files.getlist('additional_media')
+        for file in additional_files:
+            if file:
+                # Determine media type
+                media_type = 'image' if file.content_type.startswith('image/') else 'video'
+
+                PostMedia.objects.create(
+                    post=instance,
+                    media_file=file,
+                    media_type=media_type
+                )
+
+        return instance
